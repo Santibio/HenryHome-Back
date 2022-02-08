@@ -9,7 +9,7 @@ const userRoles = {
 };
 
 const login = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, inputPassword, role } = req.body;
   try {
     
     const existingUser = await userRoles[role].findOne({
@@ -20,7 +20,7 @@ const login = async (req, res) => {
       if (!existingUser)
       return res.status(404).json({ message: "User doesn't exisit." });
       const isPasswordCorrect = await bcrypt.compare(
-        password,
+        inputPassword,
         existingUser.password
         );
         if (!isPasswordCorrect)
@@ -30,14 +30,15 @@ const login = async (req, res) => {
           process.env.SECRET_WORD, //Deberia ser una palabra secreta
           { expiresIn: "24h" }
         );
-          res.status(200).json({ result:existingUser, token });
+        const { password,...userData } = existingUser.dataValues
+          res.status(200).json({ result:userData, token });
         } catch (error) {
           res.status(500).json({ message: "Something went wrong" });
         }
       };
       
       const register = async (req, res) => {
-        const { email, password, confirmPassword, firstName, lastName, role } =
+        const { email, inputPassword, confirmPassword, firstName, lastName, role } =
         req.body;
         
         try {
@@ -50,9 +51,9 @@ const login = async (req, res) => {
           
           if (existingUser)
           return res.status(404).json({ message: "User already exisit." });
-          if (password !== confirmPassword)
+          if (inputPassword !== confirmPassword)
           return res.status(400).json({ message: "Password don't match." });
-          const hashedPassword = await bcrypt.hash(password, 12);
+          const hashedPassword = await bcrypt.hash(inputPassword, 12);
           const result = await userRoles[role].create({
             email,
             firstName,
@@ -66,8 +67,8 @@ const login = async (req, res) => {
             process.env.SECRET_WORD, //Deberia ser una palabra secreta
             { expiresIn: "24h" }
           );
-        
-        res.status(200).json({ result, token });
+          const { password,...userData } = result.dataValues
+        res.status(200).json({ userData, token });
       } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Something went wrong" });
@@ -78,14 +79,16 @@ const getUserById = async(req,res)=>{
   const {id, role} = req.params
   console.log(req.params);
 
-  const User= await userRoles[role].findOne({
+  const user= await userRoles[role].findOne({
     where: {
       id: id
     },
      include:[{model:Housing}],
   }); 
 
-  res.status(200).json(User)
+  const { password,...userData } = user.dataValues
+
+  res.status(200).json(userData)
 }
 
 module.exports = { login, register,getUserById };
