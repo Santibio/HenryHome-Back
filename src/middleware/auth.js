@@ -9,7 +9,7 @@ const veryfyToken = async (req, res, next) => {
     let decodedData;
 
     if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, "test");
+      decodedData = jwt.verify(token, process.env.SECRET_WORD);
       req.userId = decodedData?.id;
     } else {
       decodedData = jwt.decode(token);
