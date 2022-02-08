@@ -2,7 +2,7 @@ const housesArray = [
   {
     name: "demo1",
     pricePerNight: 200,
-    numberOfPeople: 3,
+    numberOfPeople: 1,
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
     houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
     services: ["catering", "shops", "room service"],
