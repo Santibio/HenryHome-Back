@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserAdmin, UserClient, UserMod } = require("../db");
+const { UserAdmin, UserClient, UserMod, Housing } = require("../db");
 
 const userRoles = {
   "Client": UserClient,
@@ -72,11 +72,13 @@ const register = async (req, res) => {
 };
 const getUserById = async(req,res)=>{
   const {id, role} = req.params
+  console.log(req.params);
 
   const User= await userRoles[role].findOne({
     where: {
       id: id
     },
+     include:[{model:Housing}],
   }); 
 
   res.status(200).json(User)
