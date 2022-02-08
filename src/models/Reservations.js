@@ -27,10 +27,6 @@ module.exports = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      id_order:{
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       detail:{
         type: DataTypes.TEXT,
         allowNull: false,
@@ -38,7 +34,7 @@ module.exports = (sequelize) => {
       ,
       status:{
         type: DataTypes.STRING,
-        allowNull: false,
+        
         defaulValue: "Pending",
       }
     },
