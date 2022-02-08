@@ -90,6 +90,71 @@ const housesArray = [
       "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
     ],
   },
+  {
+    name: "demo8",
+    pricePerNight: 200,
+    numberOfPeople: 3,
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    services: ["catering", "shops", "room service"],
+    facilities: ["tv", "wifi"],
+    location: 20,
+    images: [
+      "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+    ],
+  },
+  {
+    name: "demo9",
+    pricePerNight: 200,
+    numberOfPeople: 3,
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    services: ["catering", "shops", "room service"],
+    facilities: ["tv", "wifi"],
+    location: 20,
+    images: [
+      "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+    ],
+  },
+  {
+    name: "demo10",
+    pricePerNight: 200,
+    numberOfPeople: 3,
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    services: ["catering", "shops", "room service"],
+    facilities: ["tv", "wifi"],
+    location: 20,
+    images: [
+      "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+    ],
+  },
+  {
+    name: "demo11",
+    pricePerNight: 200,
+    numberOfPeople: 3,
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    services: ["catering", "shops", "room service"],
+    facilities: ["tv", "wifi"],
+    location: 20,
+    images: [
+      "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+    ],
+  },
+  {
+    name: "demo12",
+    pricePerNight: 200,
+    numberOfPeople: 3,
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    houseRules: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aut facere et totam voluptas dolorum repellat ullam maxime architecto, obcaecati at maiores facilis minus recusandae perferendis tempore illum rem. Quia.",
+    services: ["catering", "shops", "room service"],
+    facilities: ["tv", "wifi"],
+    location: 20,
+    images: [
+      "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+    ],
+  },
 ];
 
 module.exports = {

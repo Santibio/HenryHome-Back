@@ -1,16 +1,29 @@
-const { Reservations } = require('../db')
+const { Reservations, Housing, Order } = require('../db')
+const { dias } = require('../libs/days')
+
 
 const createReservation = async(req,res)=>{
     
-    const { id_hotel, id_client, date_start, id_order, date_end, detail } = req.body
-    // Suponiendo que son los unicos datos que llegan por body
+    const { id_hotel, id_client, date_start, date_end, detail } = req.body
+    
+    
     try{
-        if(!id_hotel || !id_client || !date_start || !date_end || !detail || !id_order){
+        if(!id_hotel || !id_client || !date_start || !date_end || !detail){
             return res.json(400).json({msg: "Data needed!"})
-        }
-        const newReservation = await Reservations.create(req.body)
-        res.status(201).json(newReservation)
+        } 
+        const hotel = await Housing.findByPk(id_hotel)
+        const amount=dias(date_start,date_end)*hotel.pricePerNight
+        const order =await Order.create({amount:amount, status:"Pending"})
+        const newReservation = await Reservations.create({ 
+        id_hotel, id_client, date_start, date_end, detail,status:"Pending" })
+        
+        await newReservation.setOrder(order.id);
+        
+        res.status(201).json({newReservation,order})
+        
+        
     }catch(err){
+        console.log(err)
         res.status(500).json(err)
     }
 }
