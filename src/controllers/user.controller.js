@@ -77,7 +77,6 @@ const login = async (req, res) => {
 
 const getUserById = async(req,res)=>{
   const {id, role} = req.params
-  console.log(req.params);
 
   const user= await userRoles[role].findOne({
     where: {
