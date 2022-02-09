@@ -19,7 +19,7 @@ const createReservation = async(req,res)=>{
         
         await newReservation.setOrder(order.id);
         console.log(req.userId)
-        await newReservation.setUserClient("9cc19d22-fb01-497c-a7e4-b13aedb51003");
+        await newReservation.setUserClient(req.userId);
         res.status(201).json({newReservation,order})
         
         
