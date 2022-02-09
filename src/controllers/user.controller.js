@@ -80,10 +80,10 @@ const register = async (req, res) => {
     transporter.verify().then(()=>console.log('Listo para enviar mail'))
 
     const mailOptions = {
-      from: '"Fred Foo 👻" <pf.grupo5@gmail.com>', // sender address
-      to: "santiagobioletto@gmail.com", // list of receivers
-      subject: "Hello ✔", // Subject line
-      html: `<p>Gracias por registrarte en Henry Home, haz click en el siguiente enlance para activar tu cuenta: </p> <a href="http://localhost:3002/api/user/verify?token=${token}">Link</a>`, // html body
+      from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "Registro ✔", // Subject line
+      html: `<p>Thank you for registering at Henry Home, click on the following link to activate your account: </p> <a href="http://localhost:3002/api/user/verify?token=${token}">Link</a>`, // html body
     };
 
     transporter.sendMail(mailOptions,(error,info)=>{
