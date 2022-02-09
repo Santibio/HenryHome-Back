@@ -30,12 +30,12 @@ const serverPreparation = async () => {
         },
       });
     });
-    const { email, password, firstName, lastName, role } = userMod;
+    const { email, inputPassword, firstName, lastName, role } = userMod;
     const userDemo = await UserMod.create({
       email,
       firstName,
       lastName,
-      password,
+      password: inputPassword,
       rol: role,
     });
     housesArray.forEach(async (e) => {
