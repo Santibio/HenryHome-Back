@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserAdmin, UserClient, UserMod, Housing } = require("../db");
-const nodemailer = require('nodemailer')
+const { UserAdmin, UserClient, UserMod, Housing, Reservations } = require("../db");
+const nodemailer = require('nodemailer');
 
 const userRoles = {
   Client: UserClient,
@@ -103,13 +103,31 @@ const register = async (req, res) => {
 
 const getUserById = async (req, res) => {
   const { id, role } = req.params;
-
-  const user = await userRoles[role].findOne({
-    where: {
-      id: id,
-    },
-    include: [{ model: Housing }],
-  });
+  var user
+  if(role==="Client"){
+     user = await userRoles[role].findOne({
+      where: {
+        id: id,
+      },
+      include: [{ model: Reservations }],
+    });
+  }
+  if(role==="Moderator"){
+     user = await userRoles[role].findOne({
+      where: {
+        id: id,
+      },
+      include: [{ model: Housing }],
+    });
+  }
+  if(role==="Admin"){
+    user = await userRoles[role].findOne({
+     where: {
+       id: id,
+     },
+   });
+ }
+  
 
   const { password, ...userData } = user.dataValues;
 
