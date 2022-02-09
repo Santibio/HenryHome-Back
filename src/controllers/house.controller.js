@@ -10,9 +10,9 @@ const getHouses = async (req, res, next) => {
       offset:Offset,
       attributes: { exclude: ['createdAt',"updatedAt","LocationId","description","houseRules"] },
       include: [
-        { model: Location ,},
+        { model: Location },
         { model: Facilities },
-        { model: Services  },
+        { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
       ],
     })
