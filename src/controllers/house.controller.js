@@ -1,16 +1,34 @@
 const { Housing, Location, Facilities, Services, UserMod } = require("../db");
 const { buscar } = require("../libs/buscar")
 const getHouses = async (req, res, next) => {
+  const { page=1, size=10 }=req.query
   try {
-    const Houses = await Housing.findAll({
+    const Offset = size*(page-1)
+    const count = await Housing.findAndCountAll()
+    const HousePage = await Housing.findAndCountAll({
+      limit:size,
+      offset:Offset,
+      attributes: { exclude: ['createdAt',"updatedAt","LocationId","description","houseRules"] },
       include: [
-        { model: Location },
+        { model: Location ,},
         { model: Facilities },
-        { model: Services },
+        { model: Services  },
         { model: UserMod, attributes: ["id", "email"] },
       ],
-    });
-    res.json(Houses);
+    })
+    HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
+
+    res.json(HousePage);
+
+    // const Houses = await Housing.findAll({
+    //   include: [
+    //     { model: Location },
+    //     { model: Facilities },
+    //     { model: Services },
+    //     { model: UserMod, attributes: ["id", "email"] },
+    //   ],
+    // });
+    // res.json(Houses);
   } catch (error) {
     console.log(error);
     next(error);
