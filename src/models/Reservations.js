@@ -15,10 +15,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      id_client: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       date_start: {
         type: DataTypes.DATEONLY,
         allowNull: false,

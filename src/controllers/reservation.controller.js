@@ -1,24 +1,25 @@
-const { Reservations, Housing, Order } = require('../db')
+const { Reservations, Housing, Order, UserClient } = require('../db')
 const { dias } = require('../libs/days')
 
 
 const createReservation = async(req,res)=>{
     
-    const { id_hotel, id_client, date_start, date_end, detail } = req.body
+    const { id_hotel, date_start, date_end, detail } = req.body
     
     
     try{
-        if(!id_hotel || !id_client || !date_start || !date_end || !detail){
+        if(!id_hotel || !date_start || !date_end || !detail){
             return res.json(400).json({msg: "Data needed!"})
         } 
         const hotel = await Housing.findByPk(id_hotel)
         const amount=dias(date_start,date_end)*hotel.pricePerNight
         const order =await Order.create({amount:amount, status:"Pending"})
         const newReservation = await Reservations.create({ 
-        id_hotel, id_client, date_start, date_end, detail,status:"Pending" })
+        id_hotel, date_start, date_end, detail,status:"Pending" })
         
         await newReservation.setOrder(order.id);
-        
+        console.log(req.userId)
+        await newReservation.setUserClient("9cc19d22-fb01-497c-a7e4-b13aedb51003");
         res.status(201).json({newReservation,order})
         
         
