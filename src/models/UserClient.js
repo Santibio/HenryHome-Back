@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        unique:true
+        unique: true,
       },
       firstName: {
         type: DataTypes.STRING,
@@ -22,19 +22,24 @@ module.exports = (sequelize) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique:true
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      rol: {
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaulValue: "Client",
+        defaultValue: "Client",
       },
       bookings: {
         type: DataTypes.ARRAY(DataTypes.JSON),
+      },
+      verify: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     { timestamps: false }
