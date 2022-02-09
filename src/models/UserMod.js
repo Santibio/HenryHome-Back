@@ -9,24 +9,26 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        unique:true
+        unique: true,
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique:true
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      rol: {
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaulValue: "Moderator",
+        defaultValue: "Moderator",
       },
-      houses: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+      verify: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     { timestamps: false }
