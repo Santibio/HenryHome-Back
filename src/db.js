@@ -68,6 +68,7 @@ Housing.belongsToMany(
   { through: "Housing_Facilities", timestamps: false }
 
 );
+
 Facilities.belongsToMany(Housing, {
   through: "Housing_Facilities",
   timestamps: false,
@@ -78,11 +79,15 @@ Housing.belongsToMany(
   { through: "Housing_Services", timestamps: false  },
  
 );
+
 Services.belongsToMany(
   Housing,
   { through: "Housing_Services" , timestamps: false },
  
 );
+
+UserClient.hasMany(Reservations, {timestamps: false})
+Reservations.belongsTo(UserClient, {timestamps:false});
 
 Location.hasMany(Housing, { timestamps: false });
 Housing.belongsTo(Location, { timestamps: false });
