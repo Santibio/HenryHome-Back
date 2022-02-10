@@ -1,4 +1,11 @@
-const { Housing, Location, Facilities, Services, UserMod } = require("../db");
+const {
+  Housing,
+  Location,
+  Facilities,
+  Services,
+  UserMod,
+  Reservations,
+} = require("../db");
 const { buscar } = require("../libs/buscar")
 const getHouses = async (req, res, next) => {
   const { page=1, size=10 }=req.query
@@ -44,6 +51,10 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
+        {
+          model:
+            Reservations ,attributes: ["date_start", "date_end","userClientId"] ,
+        },
       ],
     });
     res.json(Houses);
