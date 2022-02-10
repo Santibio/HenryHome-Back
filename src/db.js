@@ -60,6 +60,7 @@ const {
   UserAdmin,
   UserClient,
   UserMod,
+  Reviews,
 } = sequelize.models;
 
 //relaciones
@@ -88,6 +89,12 @@ Services.belongsToMany(
 
 UserClient.hasMany(Reservations, {timestamps: false})
 Reservations.belongsTo(UserClient, {timestamps:false});
+
+UserClient.hasMany(Reviews, {timestamps: false})
+Reviews.belongsTo(UserClient, {timestamps:false});
+
+Housing.hasMany(Reviews, {timestamps: false})
+Reviews.belongsTo(Housing, {timestamps:false});
 
 Location.hasMany(Housing, { timestamps: false });
 Housing.belongsTo(Location, { timestamps: false });

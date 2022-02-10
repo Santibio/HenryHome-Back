@@ -1,3 +1,4 @@
+
 const {
   Housing,
   Location,
@@ -5,8 +6,10 @@ const {
   Services,
   UserMod,
   Reservations,
+  Reviews
 } = require("../db");
 const { buscar } = require("../libs/buscar")
+
 const getHouses = async (req, res, next) => {
   const { page=1, size=10 }=req.query
   try {
@@ -21,6 +24,7 @@ const getHouses = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
+        { model: Reviews,attributes: ["stars"] },
       ],
     })
     HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
@@ -55,6 +59,8 @@ const getHouseById = async (req, res, next) => {
           model:
             Reservations ,attributes: ["date_start", "date_end","userClientId"] ,
         },
+        { model: Reviews },
+
       ],
     });
     res.json(Houses);
@@ -198,6 +204,7 @@ const filterHouses = async (req, res, next)=>{
         { model: Facilities,attributes:["name"] },
         { model: Services,attributes:["name"] },
         { model: UserMod, attributes: ["id", "email"] },
+        
       ],
     });
     if(pricePerNight){

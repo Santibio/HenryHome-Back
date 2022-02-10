@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserAdmin, UserClient, UserMod, Housing, Reservations } = require("../db");
+const { UserAdmin, UserClient, UserMod, Housing, Reservations,Reviews } = require("../db");
 const nodemailer = require('nodemailer');
 
 const userRoles = {
@@ -107,7 +107,10 @@ const getUserById = async (req, res) => {
       where: {
         id: id,
       },
-      include: [{ model: Reservations }],
+      include: [{ model: Reservations },
+                {model: Reviews}
+      ],
+      
     });
     const { password, ...userData } = user.dataValues;
   
