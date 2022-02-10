@@ -33,9 +33,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: "Client",
       },
-      bookings: {
-        type: DataTypes.ARRAY(DataTypes.JSON),
-      },
       verify: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

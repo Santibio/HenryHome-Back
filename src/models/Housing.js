@@ -34,5 +34,18 @@ module.exports = (sequelize) => {
     images: {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
+    average: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      get(){
+        const estrellas =this.Reviews
+        var total = 0
+        
+        if(estrellas.length){
+          estrellas.forEach(e => {total+=e.stars});
+          return (total/estrellas.length).toFixed(1)
+        }
+        return "Sin calificar"
+      },
+    }
   });
 };
