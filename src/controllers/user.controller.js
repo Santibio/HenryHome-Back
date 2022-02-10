@@ -103,6 +103,8 @@ const register = async (req, res) => {
 
 const getUserById = async (req, res) => {
   const { id, role } = req.params;
+  var user
+  if(role==="Client"){
      user = await userRoles[role].findOne({
       where: {
         id: id,
@@ -112,10 +114,28 @@ const getUserById = async (req, res) => {
       ],
       
     });
-    const { password, ...userData } = user.dataValues;
-  
-    res.status(200).json(userData);
   }
+  if(role==="Moderator"){
+     user = await userRoles[role].findOne({
+      where: {
+        id: id,
+      },
+      include: [{ model: Housing }],
+    });
+  }
+  if(role==="Admin"){
+    user = await userRoles[role].findOne({
+     where: {
+       id: id,
+     },
+   });
+ }
+  
+
+  const { password, ...userData } = user.dataValues;
+
+  res.status(200).json(userData);
+};
  
 
 
