@@ -96,7 +96,6 @@ const register = async (req, res) => {
     const { password, ...userData } = result.dataValues;
     res.status(200).json({ userData, token });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -152,4 +151,25 @@ const verify = async (req, res) => {
 
 };
 
-module.exports = { login, register, getUserById, verify };
+const updatePassword = async (req,res)=>{
+  
+  const { role , email, newPassword } = req.body
+  try{
+      const newHashedPassword = await bcrypt.hash(newPassword,12)
+
+      await userRoles[role].update({
+      password:newHashedPassword
+    },{
+      where:{
+        email:email
+      }
+    })
+    res.status(200).json({message:"Data updated"})
+  }catch(err){
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+
+module.exports = { login, register, getUserById, verify, updatePassword };
