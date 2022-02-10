@@ -105,6 +105,12 @@ Reservations.belongsTo(Order, { timestamps: false });
 UserMod.hasMany(Housing, { timestamps: false });
 Housing.belongsTo(UserMod), { timestamps: false };
 
+Reservations.belongsToMany(Housing, { through: "Housing_Reservations" , timestamps: false });
+Housing.belongsToMany(Reservations, {
+  through: "Housing_Reservations",
+  timestamps: false,
+});
+
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');

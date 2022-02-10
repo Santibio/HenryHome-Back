@@ -136,6 +136,9 @@ const getUserById = async (req, res) => {
 
   res.status(200).json(userData);
 };
+ 
+
+
 
 const verify = async (req, res) => {
   const { token } = req.query;
