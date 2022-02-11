@@ -26,7 +26,7 @@ const createReservation = async (req, res) => {
     }
     await newReservation.setOrder(order.id);
     await newReservation.setUserClient(req.userId);
-    await newReservation.addHousing(id_hotel);
+    await newReservation.setHousing(id_hotel)
     res.status(201).json({ newReservation, order });
   } catch (err) {
     console.log(err);

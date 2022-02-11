@@ -25,6 +25,7 @@ const getHouses = async (req, res, next) => {
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
         { model: Reviews,attributes: ["stars"] },
+        { model: Reservations },
       ],
     })
     HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
