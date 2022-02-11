@@ -107,17 +107,18 @@ const createHouse = async (req, res, next) => {
 
 const updateHouse = async (req, res, next) => {
   const {
-    name,
-    pricePerNight,
-    numberOfPeople,
-    description,
-    houseRules,
-    images,
     id,
   } = req.body;
   try {
-    
-
+    const prev = await Housing.findByPk(id) 
+    const {
+      name = prev.name,
+      pricePerNight = prev.pricePerNight,
+      numberOfPeople = prev.numberOfPeople,
+      description = prev.description,
+      houseRules = prev.houseRules,
+      images = prev.images,
+    } = req.body;
     const housecheck = await Housing.findOne({ where: { id: id } });
     console.log(housecheck);
     if (housecheck.userModId === req.userId) {
@@ -136,7 +137,8 @@ const updateHouse = async (req, res, next) => {
         where: {
           id: id,
         },
-      }
+      },
+      
     );
     const resp = await Housing.findAll({ where: { id: id } });
 
