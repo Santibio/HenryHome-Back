@@ -26,9 +26,10 @@ const getFacilities = async (req,res)=>{
             })    
         })
         const facilities = await Facilities.findAll()
-        res.status(200).json(facilities)
-    }catch(err){
-        res.status(404).json(err)
+        res.json(facilities)
+    }catch(error){
+         console.log(error);
+         next(error);
     }
 }
 
