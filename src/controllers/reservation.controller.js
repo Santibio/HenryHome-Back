@@ -26,9 +26,9 @@ const createReservation = async (req, res) => {
     await newReservation.setUserClient(req.userId);
     await newReservation.setHousing(id_hotel)
     res.status(201).json({ newReservation, order });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err.message);
+  } catch (error) {
+    console.log(error)
+    next(error)
   }
 };
 
@@ -46,8 +46,9 @@ const updateReservation = async (req, res) => {
       }
     );
     res.status(200).json({ msg: "Reservation updated" });
-  } catch (err) {
-    res.status(500).json(err);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 

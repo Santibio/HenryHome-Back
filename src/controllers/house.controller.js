@@ -1,4 +1,3 @@
-
 const {
   Housing,
   Location,
@@ -6,29 +5,37 @@ const {
   Services,
   UserMod,
   Reservations,
-  Reviews
+  Reviews,
 } = require("../db");
-const { buscar } = require("../libs/buscar")
+const { buscar } = require("../libs/buscar");
 
 const getHouses = async (req, res, next) => {
-  const { page=1, size=10 }=req.query
+  const { page = 1, size = 10 } = req.query;
   try {
-    const Offset = size*(page-1)
-    const count = await Housing.findAndCountAll()
+    const Offset = size * (page - 1);
+    const count = await Housing.findAndCountAll();
     const HousePage = await Housing.findAndCountAll({
-      limit:size,
-      offset:Offset,
-      attributes: { exclude: ['createdAt',"updatedAt","LocationId","description","houseRules"] },
+      limit: size,
+      offset: Offset,
+      attributes: {
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "LocationId",
+          "description",
+          "houseRules",
+        ],
+      },
       include: [
         { model: Location },
         { model: Facilities },
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
-        { model: Reviews,attributes: ["stars"] },
+        { model: Reviews, attributes: ["stars"] },
         { model: Reservations },
       ],
-    })
-    HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
+    });
+    HousePage.count = count.count; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
     res.json(HousePage);
   } catch (error) {
     console.log(error);
@@ -46,11 +53,10 @@ const getHouseById = async (req, res, next) => {
         { model: Services },
         { model: UserMod },
         {
-          model:
-            Reservations ,attributes: ["date_start", "date_end","userClientId"] ,
+          model: Reservations,
+          attributes: ["date_start", "date_end", "userClientId"],
         },
         { model: Reviews },
-
       ],
     });
     res.json(Houses);
@@ -106,11 +112,9 @@ const createHouse = async (req, res, next) => {
 };
 
 const updateHouse = async (req, res, next) => {
-  const {
-    id,
-  } = req.body;
+  const { id } = req.body;
   try {
-    const prev = await Housing.findByPk(id) 
+    const prev = await Housing.findByPk(id);
     const {
       name = prev.name,
       pricePerNight = prev.pricePerNight,
@@ -119,7 +123,7 @@ const updateHouse = async (req, res, next) => {
       houseRules = prev.houseRules,
       images = prev.images,
     } = req.body;
-    const housecheck = await Housing.findOne({ where: { id: id } });
+    const housecheck = await Housing.findByPk(id);
     console.log(housecheck);
     if (housecheck.userModId === req.userId) {
       console.log("Es el mismo usuario, (no se aplico esta proiedad)");
@@ -137,8 +141,7 @@ const updateHouse = async (req, res, next) => {
         where: {
           id: id,
         },
-      },
-      
+      }
     );
     const resp = await Housing.findAll({ where: { id: id } });
 
@@ -170,53 +173,57 @@ const AdminChangeHousing = async (req, res, next) => {
       { status: status },
       {
         where: {
-          id: id,
+          id
         },
       }
     );
-   
-     result >= 1
-       ? res.status(201).json({ msg: "Successfully changed" })
-       : res.json({ msg: "House not changed" });
-    
 
+    result >= 1
+      ? res.status(201).json({ msg: "Successfully changed" })
+      : res.json({ msg: "House not changed" });
   } catch (error) {
-    console.log(error, "errorr");
+    console.log(error);
     next(error);
   }
 };
-const filterHouses = async (req, res, next)=>{
-  const { pricePerNight, numberOfPeople, facilit,serv,loc } =req.body
-  
-  try{
+const filterHouses = async (req, res, next) => {
+  const { pricePerNight, numberOfPeople, facilit, serv, loc } = req.body;
+
+  try {
     var filtro = await Housing.findAll({
       include: [
-        { model: Location, attributes:["name"] },
-        { model: Facilities,attributes:["name"] },
-        { model: Services,attributes:["name"] },
+        { model: Location, attributes: ["name"] },
+        { model: Facilities, attributes: ["name"] },
+        { model: Services, attributes: ["name"] },
         { model: UserMod, attributes: ["id", "email"] },
-        
       ],
     });
-    if(pricePerNight){
-      filtro = filtro.filter(e=>e.pricePerNight===pricePerNight)}
-    if(numberOfPeople){
-      filtro = filtro.filter(e=>e.numberOfPeople===numberOfPeople)}
-    if(loc){
-      filtro = filtro.filter(e=>e.dataValues.Location.dataValues.name.toLowerCase()===loc.toLowerCase())}
-    if(facilit){
-    
-      filtro= filtro.filter(e=>buscar(e.dataValues.Facilities,facilit))}
-    if(serv){
-        filtro= filtro.filter(e=>buscar(e.dataValues.Services,serv))}  
+    if (pricePerNight) {
+      filtro = filtro.filter((e) => e.pricePerNight === pricePerNight);
+    }
+    if (numberOfPeople) {
+      filtro = filtro.filter((e) => e.numberOfPeople === numberOfPeople);
+    }
+    if (loc) {
+      filtro = filtro.filter(
+        (e) =>
+          e.dataValues.Location.dataValues.name.toLowerCase() ===
+          loc.toLowerCase()
+      );
+    }
+    if (facilit) {
+      filtro = filtro.filter((e) => buscar(e.dataValues.Facilities, facilit));
+    }
+    if (serv) {
+      filtro = filtro.filter((e) => buscar(e.dataValues.Services, serv));
+    }
 
-res.json(filtro)
-  
-  }catch(error){
-    console.log(error,"Error")
-    next(error)
+    res.json(filtro);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
-} 
+};
 module.exports = {
   getHouses,
   getHouseById,
