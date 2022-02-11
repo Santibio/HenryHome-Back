@@ -30,6 +30,8 @@ npm run dev
 ```
 # ROUTES
 
+(*) = required 
+
 ## `USERS`
 
 Routes related to the users
@@ -37,12 +39,55 @@ Routes related to the users
 #### `POST` 
 
 ```http
-  POST /user/login : Logs user into the system
+  POST /api/user/login : Logs user into the system
 ```
+Login receives: (body)
+```javascript
+{
+     *email:"jujujuju@gmail.com", 
+     *inputPassword:"pepe2",
+     *role://Client, Admin, Moderator
+}
+```
+And returns the user information along with its token
+
 
 
 ```http
-  POST /user/register : Creates a new user
+  POST /api/user/register : Creates a new user
+```
+Register receives: (body)
+
+```javascript
+  {
+    *email:"example@gmail.com",
+    *inputPassword: "blabla",
+    *confirmPassword:"blabla",
+    *firstName:"Pedro", 
+    *lastName:"Peyon",
+    *role://Client, Admin, Moderator
+}
+```
+And returns the user information along with its token
+
+#### `GET`
+
+```http
+  GET /api/user/:id/:role
+```
+Returns the user information
+
+
+```http
+  GET /api/user/password
+```
+Change password receives: (body)
+```javascript
+{ 
+ *email:"ejemplo@gmail.com",
+ *newPassword: "blabla",
+ *role://Client, Admin, Moderator
+}
 ```
 ---------------
 
@@ -53,32 +98,79 @@ Routes related to the houses
 #### `GET`
 
 ```http
-  GET /houses : Gets all houses
+  GET /api/houses : Gets all houses
 ```
+Query= page & size to pagination
+defaults= page=1 size=10
+
+
 
 ```http
-  GET /houses/:id : Finds houses by ID
-    req.body = {"id":string}
+  GET /api/houses/:id : Finds houses by ID
 ```
+
+
+
 
 #### `POST`
 
 ```http
-  POST /houses : Creates a new house
+  POST /api/houses : Creates a new house
   
+```
+Post House receives: (body)
+
+```javascript
+ {
+    *"name": "Hobbiton",
+    *"pricePerNight": 5,
+    *"numberOfPeople": 3,
+    "description": "Hello",
+    "houseRules": "Hello",
+    "services": ["pool"],
+    "facilities": ["tv", "wifi"],
+    "location": 7,
+    "images": ["https://farm6.staticflickr.com/5492/14576186774_c28c3e308c_z.jpg"]
+  }
 ```
 
 #### `PATCH`
 
 ```http
-  PATCH /houses : Updates an existing house
+  PATCH /api/houses : Updates an existing house
+```
+Patch House receives: (body)
+```javascript
+ {
+    "name": "Hobbiton",
+    "pricePerNight": 5,
+    "numberOfPeople": 3,
+    "description": "Hello",
+    "houseRules": "Hello",
+    "services": ["pool"],
+    "facilities": ["tv", "wifi"],
+    "location": 7,
+    "images": ["https://farm6.staticflickr.com/5492/14576186774_c28c3e308c_z.jpg"]
+  }
+```
+
+```http
+  PATCH /api/houses/status : Updates the state of a house /admins 
+```
+Patch house status receives (body)
+```javascript
+{ 
+*status,
+*id 
+}
 ```
 
 #### `DELETE`
 
 ```http
-  DELETE /houses : Deletes a house
+  DELETE /api/houses : Deletes a house
 ```
+Receives *id* (body)
 
 ------------
 
@@ -89,14 +181,15 @@ Routes related to the facilities
 #### `GET`
 
 ```http
-  GET /facilities : Gets all facilities
+  GET /api/facilities : Gets all facilities
 ```
 
 #### `POST`
 
 ```http
-  POST /facilities : Creates a new facility
+  POST /api/facilities : Creates a new facility
 ```
+Recieves *name* (body)
 
 --------------
 
@@ -107,14 +200,15 @@ Routes related to the services
 #### `GET`
 
 ```http
-  GET /services : Gets all services
+  GET /api/services : Gets all services
 ```
 
 #### `POST`
 
 ```http
-  POST /facilities : Creates a new service
+  POST /api/facilities : Creates a new service
 ```
+Recieves *name* (body)
 
 ------
 
@@ -125,7 +219,70 @@ Routes related to the locations
 #### `GET`
 
 ```http
-  GET /locations : Gets all the locations
+  GET /api/locations : Gets all the locations
+```
+
+## `Reservation`
+#### `POST` 
+```http
+  Post /api/reservation
+```
+Recieves: (body)
+```javascript
+{
+    *id_hotel:4d88b591-e7cb-4647-bfa1-d101ea435185",
+    *date_start:"2015-09-10",
+    *date_end:"2015-10-15",
+}
+```
+#### `PUT` 
+```http
+  Put /api/reservation : Change status to Resolved
+```
+Recibes the *id* of the reservation (body)
+
+--------------
+
+## `Reviews`
+#### `POST` 
+```http
+  Post /api/reviews
+```
+Post Review receives (body)
+```javascript
+{ 
+    *stars:3, // 1-5 
+    *"id_hotel":"d98f73a5-0d0e-470a-97fe-0335aa89d911",
+    "description": "Holaquetal",
+    
+    
+    }
+
+```
+#### `PATCH` 
+```http
+  Patch /api/reviews
+```
+Patch Review receives (body)
+```javascript
+{ 
+    stars:3, // 1-5 
+    "description": "Holaquetal",
+    *"id":"034103ab-3423-4702-ac6d-512548a498c7" // review id
+    }
+
+```
+#### `DELETE` 
+```http
+  Delete /api/reviews
+```
+
+Delete Review receives (body)
+```javascript
+{ 
+    *"id":"034103ab-3423-4702-ac6d-512548a498c7" // review id
+}
+
 ```
 
 
