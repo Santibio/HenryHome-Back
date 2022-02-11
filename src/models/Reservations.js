@@ -30,8 +30,7 @@ module.exports = (sequelize) => {
       ,
       status:{
         type: DataTypes.STRING,
-        
-        defaulValue: "Pending",
+        defaultValue: "Pending",
       }
     },
     { timestamps: true }
