@@ -13,7 +13,6 @@ const validateDate = (id, dateStart, dateEnd) =>
                dateStart <= new Date(result.Reservations[i].date_start) &&
                dateEnd >= new Date(result.Reservations[i].date_end)
                ) {
-                 console.log('si');
                reject(new Error("Already reserved"));
              }
            }

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { UserAdmin, UserClient, UserMod } = require("../db");
 
-const veryfyToken = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
 
@@ -51,4 +51,4 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { veryfyToken, isModerador, isAdmin };
+module.exports = { verifyToken, isModerador, isAdmin };
