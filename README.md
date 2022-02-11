@@ -252,7 +252,7 @@ Post Review receives (body)
 ```javascript
 { 
     *stars:3, // 1-5 
-    *"id_hotel":"d98f73a5-0d0e-470a-97fe-0335aa89d911",
+    *id_hotel:"d98f73a5-0d0e-470a-97fe-0335aa89d911",
     "description": "Holaquetal",
     
     
@@ -267,8 +267,8 @@ Patch Review receives (body)
 ```javascript
 { 
     stars:3, // 1-5 
-    "description": "Holaquetal",
-    *"id":"034103ab-3423-4702-ac6d-512548a498c7" // review id
+    description: "Holaquetal",
+    *id:"034103ab-3423-4702-ac6d-512548a498c7" // review id
     }
 
 ```
@@ -280,7 +280,7 @@ Patch Review receives (body)
 Delete Review receives (body)
 ```javascript
 { 
-    *"id":"034103ab-3423-4702-ac6d-512548a498c7" // review id
+    *id:"034103ab-3423-4702-ac6d-512548a498c7" // review id
 }
 
 ```
