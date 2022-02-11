@@ -15,8 +15,8 @@ const router = Router()
 router.get("/filt",filterHouses)
 router.get("/", getHouses);
 router.get("/:id", getHouseById)
-router.post("/",verifyToken,isModerador,createHouse)
-router.patch("/",verifyToken,isModerador, updateHouse)
+router.post("/",[verifyToken,isModerador],createHouse)
+router.patch("/",[verifyToken,isModerador], updateHouse)
 router.patch("/status",AdminChangeHousing);
 router.delete("/", deleteHouse)
 

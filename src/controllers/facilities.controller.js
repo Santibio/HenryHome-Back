@@ -15,7 +15,7 @@ const createFacilitie = async (req, res, next) => {
           ? { msg: "Correctly created facility",  facility }
           : { msg: "There is already a facility with that name", facility })
     } else {
-      res.status(400).json({ mesagge: "Data needed." });
+      res.status(400).json({ msg: "Data needed" });
     }
   } catch (error) {
     console.log(error);

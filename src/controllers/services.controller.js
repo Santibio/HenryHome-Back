@@ -5,16 +5,22 @@ const createService = async (req, res) => {
   const { name } = req.body;
   try {
     if (name) {
-      const service = await Services.findOrCreate({
+      const [service,result] = await Services.findOrCreate({
         where: { name: name.toLowerCase() },
       });
-      res.json(service);
+      return res
+        .status(201)
+        .json(
+          result
+            ? { msg: "Correctly created service", service }
+            : { msg: "There is already a service with that name", service }
+        );
     } else {
-      res.status(400).json(arr);
+      res.status(400).json({ msg: "Data needed" });
     }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err)
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
@@ -30,8 +36,9 @@ const getServices = async (req, res) => {
 
     const services = await Services.findAll();
     res.json(services);
-  } catch (err) {
-    res.status(404).json(err);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
