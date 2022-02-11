@@ -54,8 +54,8 @@ const register = async (req, res,next) => {
         email,
       },
     });
-
-    if (existingUser)
+    
+    if (existingUser && existingUser.verify)
       return res.status(404).json({ message: "User already exisit." });
     if (inputPassword !== confirmPassword)
       return res.status(400).json({ message: "Password don't match." });
