@@ -1,5 +1,5 @@
 const { Reservations, Housing, Order, UserClient } = require("../db");
-const { dias } = require("../libs/days");
+const { daysCalculator } = require("../libs/daysCalculator");
 const {validateDate} = require("../libs/validateDate")
 
 const createReservation = async (req, res) => {
@@ -10,19 +10,17 @@ const createReservation = async (req, res) => {
       return res.json(400).json({ msg: "Data needed!" });
     }
     const hotel = await Housing.findByPk(id_hotel);
-    console.log(hotel);
-    const amount = dias(date_start, date_end) * hotel.pricePerNight;
+    const amount = daysCalculator(date_start, date_end) * hotel.pricePerNight;
     const order = await Order.create({ amount: amount, status: "Pending" });
     const newReservation = await Reservations.create({
       id_hotel,
       date_start,
       date_end,
       detail,
-      status: "Pending",
     });
-    const result = await validateDate(id_hotel, date_start, date_end);
-    if(!result){
-        res.status(404).json({msg: 'Date already taken'})
+    const available = await validateDate(id_hotel, date_start, date_end);
+    if(!available){
+        return res.status(404).json({msg: 'Date already taken'})
     }
     await newReservation.setOrder(order.id);
     await newReservation.setUserClient(req.userId);
