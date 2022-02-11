@@ -39,11 +39,14 @@ module.exports = (sequelize) => {
       get(){
         const estrellas =this.Reviews
         var total = 0
-        
+        if(!estrellas){
+          return "Se requiere el modelo Reviews para ver el promedio"
+        }
         if(estrellas.length){
           estrellas.forEach(e => {total+=e.stars});
           return (total/estrellas.length).toFixed(1)
         }
+        
         return "Sin calificar"
       },
     }
