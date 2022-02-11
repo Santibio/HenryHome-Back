@@ -126,8 +126,7 @@ const updateHouse = async (req, res, next) => {
     id,
   } = req.body;
   try {
-    console.log("USERIDeste", req.userId);
-    console.log("id", id);
+    
 
     const housecheck = await Housing.findOne({ where: { id: id } });
     console.log(housecheck);

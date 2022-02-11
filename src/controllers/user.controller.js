@@ -109,9 +109,8 @@ const getUserById = async (req, res) => {
         id: id,
       },
       include: [{ model: Reservations },
-                {model: Reviews}
-      ],
-      
+        { model: Reviews }
+        ],
     });
   }
   if(role==="Moderator"){
@@ -119,7 +118,9 @@ const getUserById = async (req, res) => {
       where: {
         id: id,
       },
-      include: [{ model: Housing }],
+      include: [{ model: Housing},
+         
+      ],
     });
   }
   if(role==="Admin"){
