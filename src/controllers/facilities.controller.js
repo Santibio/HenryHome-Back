@@ -1,7 +1,7 @@
 const { Facilities } = require('../db')
 const { facilitiesArray } = require('../config_db/facilities.array')
 
-const createFacilitie = async (req,res)=>{
+const createFacilitie = async (req,res, next)=>{
     const { name } = req.body
     try{
         if(name){
@@ -10,9 +10,9 @@ const createFacilitie = async (req,res)=>{
         }else{
             res.status(400).json({mesagge:"Data needed."})
         }
-    }catch(err){
-        console.log(err)
-        res.status(500).json(err)
+    }catch(error){
+        console.log(error)
+        next(error)
     }
 }
 
