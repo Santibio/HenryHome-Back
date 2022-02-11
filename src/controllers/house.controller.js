@@ -29,18 +29,7 @@ const getHouses = async (req, res, next) => {
       ],
     })
     HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
-
     res.json(HousePage);
-
-    // const Houses = await Housing.findAll({
-    //   include: [
-    //     { model: Location },
-    //     { model: Facilities },
-    //     { model: Services },
-    //     { model: UserMod, attributes: ["id", "email"] },
-    //   ],
-    // });
-    // res.json(Houses);
   } catch (error) {
     console.log(error);
     next(error);
