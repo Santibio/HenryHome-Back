@@ -6,7 +6,8 @@ const {
   Services,
   UserMod,
   Reservations,
-  Reviews
+  Reviews,
+  UserClient,
 } = require("../db");
 const { buscar } = require("../libs/buscar")
 
@@ -26,6 +27,7 @@ const getHouses = async (req, res, next) => {
         { model: UserMod, attributes: ["id", "email"] },
         { model: Reviews,attributes: ["stars"] },
         { model: Reservations },
+        
       ],
     })
     HousePage.count=count.count // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
@@ -119,7 +121,7 @@ const updateHouse = async (req, res, next) => {
       houseRules = prev.houseRules,
       images = prev.images,
     } = req.body;
-    const housecheck = await Housing.findOne({ where: { id: id } });
+    const housecheck = await Housing.findByPk(id);
     console.log(housecheck);
     if (housecheck.userModId === req.userId) {
       console.log("Es el mismo usuario, (no se aplico esta proiedad)");
