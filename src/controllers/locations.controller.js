@@ -2,9 +2,8 @@ const { Location } = require("../db");
 const { locationsArray } = require("../config_db/locations.array");
 
 
-const getLocations = async (req, res) => {
+const getLocations = async (req, res,next) => {
   try {
-      
     locationsArray.forEach(async (f) => {
        await Location.findOrCreate({
         where: {
@@ -15,8 +14,8 @@ const getLocations = async (req, res) => {
 
     const locations = await Location.findAll()
     res.json(locations);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    next(error)
   }
 };
 
