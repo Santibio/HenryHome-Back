@@ -18,6 +18,7 @@ const getHouses = async (req, res, next) => {
       limit: size,
       offset: Offset,
       attributes: {
+        
         exclude: [
           "createdAt",
           "updatedAt",
@@ -33,6 +34,7 @@ const getHouses = async (req, res, next) => {
         { model: UserMod, attributes: ["id", "email"] },
         { model: Reviews, attributes: ["stars"] },
         { model: Reservations },
+        
       ],
     });
     HousePage.count = count.count; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
