@@ -18,6 +18,7 @@ const getHouses = async (req, res, next) => {
       limit: size,
       offset: Offset,
       attributes: {
+        
         exclude: [
           "createdAt",
           "updatedAt",
