@@ -16,7 +16,7 @@ const userRoles = {
   Moderator: UserMod,
 };
 
-const login = async (req, res,next) => {
+const login = async (req, res, next) => {
   const { email, inputPassword, role } = req.body;
   try {
     const existingUser = await userRoles[role].findOne({
@@ -41,11 +41,11 @@ const login = async (req, res,next) => {
     res.json({ result: userData, token });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 
-const register = async (req, res,next) => {
+const register = async (req, res, next) => {
   const { email, inputPassword, confirmPassword, firstName, lastName, role } =
     req.body;
   try {
@@ -54,7 +54,7 @@ const register = async (req, res,next) => {
         email,
       },
     });
-    
+    if (existingUser && !existingUser.verify) return res.status(404).json({ message: "User needs to be verify." });
     if (existingUser && existingUser.verify)
       return res.status(404).json({ message: "User already exisit." });
     if (inputPassword !== confirmPassword)
@@ -104,7 +104,7 @@ const register = async (req, res,next) => {
     res.json({ userData, token });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 
@@ -113,13 +113,12 @@ const getUserById = async (req, res, next) => {
   try {
     let user;
     if (role === "Client") {
-      user = await userRoles[role].findByPk(id,{
-
+      user = await userRoles[role].findByPk(id, {
         include: [{ model: Reservations }, { model: Reviews }],
       });
     }
     if (role === "Moderator") {
-      user = await userRoles[role].findByPk(id,{
+      user = await userRoles[role].findByPk(id, {
         include: [{ model: Housing }],
       });
     }
@@ -134,7 +133,7 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const verify = async (req, res,next) => {
+const verify = async (req, res, next) => {
   const { token } = req.query;
   try {
     const { id, role } = jwt.verify(token, process.env.SECRET_WORD);
@@ -152,9 +151,8 @@ const verify = async (req, res,next) => {
       : res.json({ msg: "User not verify" });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
-  
 };
 
 const updatePassword = async (req, res) => {
