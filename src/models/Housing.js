@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
     average: {
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       get(){
-        const estrellas =this.Reviews
+        const estrellas = this.Reviews
         var total = 0
         if(!estrellas){
           return "Se requiere el modelo Reviews para ver el promedio"

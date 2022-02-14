@@ -6,6 +6,7 @@ const services = require('./services.route.js')
 const locations = require('./locations.route.js')
 const reservation = require('./reservation.route.js')
 const reviews = require('./reviews.route.js')
+const favorites = require("./favorites.route.js");
 
 const router = Router()
 
@@ -16,6 +17,7 @@ router.use('/services', services)
 router.use("/locations", locations);
 router.use('/reservation',reservation)
 router.use('/reviews',reviews)
+router.use("/favorites", favorites);
 
 
 module.exports = router

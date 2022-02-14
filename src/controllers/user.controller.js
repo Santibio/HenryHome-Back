@@ -55,7 +55,10 @@ const register = async (req, res,next) => {
       },
     });
     
-    if (existingUser && existingUser.verify)
+    if (existingUser && !existingUser.verify){
+      return res.status(404).json({ message: "User needs to be verify." });
+    }
+    if (existingUser && existingUser)
       return res.status(404).json({ message: "User already exisit." });
     if (inputPassword !== confirmPassword)
       return res.status(400).json({ message: "Password don't match." });
@@ -168,7 +171,7 @@ const updatePassword = async (req, res) => {
       },
       {
         where: {
-          email: email,
+          email
         },
       }
     );
