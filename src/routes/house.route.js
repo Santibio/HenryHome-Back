@@ -6,13 +6,13 @@ const {
   updateHouse,
   deleteHouse,
   AdminChangeHousing,
-  filterHouses,
+ 
 } = require("../controllers/house.controller.js");
 const { verifyToken, isModerador, isAdmin } = require("../middleware/auth.js");
 
 const router = Router()
 
-router.get("/filt",filterHouses)
+
 router.get("/", getHouses);
 router.get("/:id", getHouseById)
 router.post("/",[verifyToken,isModerador],createHouse)

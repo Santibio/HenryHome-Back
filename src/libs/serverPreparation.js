@@ -45,6 +45,7 @@ const serverPreparation = async () => {
         },
         defaults: {
           pricePerNight: e.pricePerNight,
+          numberOfBeds: e.numberOfBeds,
           numberOfPeople: e.numberOfPeople,
           description: e.description,
           houseRules: e.houseRules,
