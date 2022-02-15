@@ -75,11 +75,11 @@ const register = async (req, res, next) => {
       firstName,
       lastName,
       password: hashedPassword,
-      role,
+     
     });
-
+  
     const token = jwt.sign(
-      { email: result.email, id: result.id, role: result.role },
+      { email: result.email, id: result.id},
       process.env.SECRET_WORD, //Deberia ser una palabra secreta
       { expiresIn: "24h" }
     );
