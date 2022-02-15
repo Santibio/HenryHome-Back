@@ -103,6 +103,19 @@ Routes related to the houses
 Query= page & size to pagination
 defaults= page=1 size=10
 
+to filters use body:
+```javascript
+{ 
+ minPrice: 300, // minPrice dont need maxPrice to work
+ maxPrice: 600, // maxPrice dont need minPrice to work
+ location: "Santa Cruz",
+ stars: 3, // minStar value
+ numberOfPeople: 3,
+ numberOfBeds: 2,
+ status: "Pending"
+}
+```
+
 
 
 ```http

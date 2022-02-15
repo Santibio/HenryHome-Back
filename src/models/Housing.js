@@ -21,6 +21,11 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    numberOfBeds: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: this.numberOfPeople,
+    },
     description: {
       type: DataTypes.TEXT,
     },
@@ -35,7 +40,8 @@ module.exports = (sequelize) => {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
     average: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      type: DataTypes.VIRTUAL,
+      
       get(){
         const estrellas =this.Reviews
         var total = 0
@@ -47,7 +53,7 @@ module.exports = (sequelize) => {
           return (total/estrellas.length).toFixed(1)
         }
         
-        return "Sin calificar"
+        return 0
       },
     }
   });

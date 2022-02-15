@@ -8,15 +8,27 @@ const {
   Reviews,
 } = require("../db");
 const { buscar } = require("../libs/buscar");
+const  filter  = require("../libs/Filter")
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
+  const ubicacion = req.body.location? {name:req.body.location} : null
+  filter(req)
   try {
+
     const Offset = size * (page - 1);
-    const count = await Housing.findAndCountAll();
+
+    const count = await Housing.findAndCountAll({where: filter(req),include: [
+      {
+        model: Location,
+        where: ubicacion,
+        required:true
+      }]});
+
     const HousePage = await Housing.findAndCountAll({
       limit: size,
       offset: Offset,
+      where: filter(req),
       attributes: {
         
         exclude: [
@@ -28,7 +40,11 @@ const getHouses = async (req, res, next) => {
         ],
       },
       include: [
-        { model: Location },
+        {
+          model: Location,
+          where: ubicacion,
+          required:true
+        },
         { model: Facilities },
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
@@ -37,7 +53,14 @@ const getHouses = async (req, res, next) => {
         
       ],
     });
-    HousePage.count = count.count; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
+
+     var c=0;
+    
+     if(req.body.stars&&HousePage.rows.length){
+       HousePage.rows = HousePage.rows.filter(e=>{if(e.average<= req.body.stars) return true; c++})
+     }
+    HousePage.count = count.count-c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
+    
     res.json(HousePage);
   } catch (error) {
     console.log(error);
@@ -73,6 +96,7 @@ const createHouse = async (req, res, next) => {
     name,
     pricePerNight,
     numberOfPeople,
+    numberOfBeds,
     description,
     houseRules,
     images,
@@ -88,6 +112,7 @@ const createHouse = async (req, res, next) => {
       defaults: {
         pricePerNight,
         numberOfPeople,
+        numberOfBeds,
         description,
         houseRules,
         images,
@@ -121,6 +146,7 @@ const updateHouse = async (req, res, next) => {
       name = prev.name,
       pricePerNight = prev.pricePerNight,
       numberOfPeople = prev.numberOfPeople,
+      numberOfBeds = prev.numberOfBeds,
       description = prev.description,
       houseRules = prev.houseRules,
       images = prev.images,
@@ -135,6 +161,7 @@ const updateHouse = async (req, res, next) => {
         name,
         pricePerNight,
         numberOfPeople,
+        numberOfBeds,
         description,
         houseRules,
         images,
@@ -188,44 +215,7 @@ const AdminChangeHousing = async (req, res, next) => {
     next(error);
   }
 };
-const filterHouses = async (req, res, next) => {
-  const { pricePerNight, numberOfPeople, facilit, serv, loc } = req.body;
 
-  try {
-    var filtro = await Housing.findAll({
-      include: [
-        { model: Location, attributes: ["name"] },
-        { model: Facilities, attributes: ["name"] },
-        { model: Services, attributes: ["name"] },
-        { model: UserMod, attributes: ["id", "email"] },
-      ],
-    });
-    if (pricePerNight) {
-      filtro = filtro.filter((e) => e.pricePerNight === pricePerNight);
-    }
-    if (numberOfPeople) {
-      filtro = filtro.filter((e) => e.numberOfPeople === numberOfPeople);
-    }
-    if (loc) {
-      filtro = filtro.filter(
-        (e) =>
-          e.dataValues.Location.dataValues.name.toLowerCase() ===
-          loc.toLowerCase()
-      );
-    }
-    if (facilit) {
-      filtro = filtro.filter((e) => buscar(e.dataValues.Facilities, facilit));
-    }
-    if (serv) {
-      filtro = filtro.filter((e) => buscar(e.dataValues.Services, serv));
-    }
-
-    res.json(filtro);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
 module.exports = {
   getHouses,
   getHouseById,
@@ -233,5 +223,5 @@ module.exports = {
   updateHouse,
   deleteHouse,
   AdminChangeHousing,
-  filterHouses,
+  
 };
