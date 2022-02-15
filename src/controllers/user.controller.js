@@ -177,7 +177,31 @@ const updatePassword = async (req, res) => {
         },
       }
     );
-    res.status(201).json({ msg: "Data updated" });
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "pf.grupo5@gmail.com",
+        pass: "iwyssmpfaiqpplkw",
+      },
+    });
+
+    const mailOptions = {
+      from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "Cambio de contraseña ✔", // Subject line
+      html: `<p>Your password has been sucessfully changed :)</p>`, // html body
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) res.status(500).send(error.message);
+      else {
+        console.log("Email enviado");
+      }
+    });
+    res.status(200).json({msg:'Password changed!'})
+    next()
   } catch (error) {
     console.log(error);
     next(error);
