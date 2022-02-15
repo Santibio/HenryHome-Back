@@ -162,8 +162,9 @@ const verify = async (req, res, next) => {
   }
 };
 
-const updatePassword = async (req, res) => {
+const updatePassword = async (req, res,next) => {
   const { role, email, newPassword } = req.body;
+  console.log(role, email, newPassword); //Faltaria un confirm
   try {
     const newHashedPassword = await bcrypt.hash(newPassword, 12);
 
@@ -201,7 +202,6 @@ const updatePassword = async (req, res) => {
       }
     });
     res.status(200).json({msg:'Password changed!'})
-    next()
   } catch (error) {
     console.log(error);
     next(error);
@@ -210,6 +210,7 @@ const updatePassword = async (req, res) => {
 
 const confirmUpdatePassword = async (req,res)=>{
   const { email } = req.body
+  console.log({email})
   try{
     const user = await UserClient.findAll({
       where:{
@@ -237,7 +238,8 @@ const confirmUpdatePassword = async (req,res)=>{
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
-        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+        /* html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body */
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) res.status(500).send(error.message);
