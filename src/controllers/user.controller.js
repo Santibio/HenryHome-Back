@@ -54,9 +54,9 @@ const register = async (req, res, next) => {
         email,
       },
     });
-    if (existingUser && !existingUser.verify) return res.status(404).json({ message: "User needs to be verify." });
+    if (existingUser && !existingUser.verify) return res.status(400).json({ message: "User needs to be verify." });
     if (existingUser && existingUser.verify)
-      return res.status(404).json({ message: "User already exisit." });
+      return res.json({ message: "User already exisit." });
     if (inputPassword !== confirmPassword)
       return res.status(400).json({ message: "Password don't match." });
     const hashedPassword = await bcrypt.hash(inputPassword, 12);
