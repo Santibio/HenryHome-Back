@@ -87,6 +87,16 @@ Services.belongsToMany(
  
 );
 
+UserClient.belongsToMany(Housing, 
+   { through: "ClientFavs-HousingFavs" , timestamps: false, as: 'favs'},
+   
+);
+
+Housing.belongsToMany(UserClient, 
+  { through: "ClientFavs-HousingFavs" , timestamps: false, as: 'favs'},
+  
+);
+
 UserClient.hasMany(Reservations, {timestamps: false})
 Reservations.belongsTo(UserClient, {timestamps:false});
 
