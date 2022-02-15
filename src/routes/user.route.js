@@ -13,5 +13,5 @@ router.get("/:id/:role",getUserById)
 router.post("/login", login)
 router.post("/register", register)
 router.get("/verify", verify)
-router.put('/password',updatePassword)
+router.put('/change-password',updatePassword)
 module.exports = router
