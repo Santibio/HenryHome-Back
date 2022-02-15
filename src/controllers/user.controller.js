@@ -208,4 +208,52 @@ const updatePassword = async (req, res) => {
   }
 };
 
-module.exports = { login, register, getUserById, verify, updatePassword };
+const confirmUpdatePassword = async (req,res)=>{
+  const { email } = req.body
+  try{
+    const user = await UserClient.findAll({
+      where:{
+        email:email
+      }
+    })
+    if(user){
+      const token = jwt.sign(
+        { email: email },
+        process.env.SECRET_WORD, //Deberia ser una palabra secreta
+        { expiresIn: "24h" }
+      );
+
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: "pf.grupo5@gmail.com",
+          pass: "iwyssmpfaiqpplkw",
+        },
+      });
+  
+      const mailOptions = {
+        from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: "Cambio de contraseña ✔", // Subject line
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) res.status(500).send(error.message);
+        else {
+          console.log("Email enviado");
+        }
+      });
+  
+      res.status(200).json({message:"Mail sent"})
+    }
+    else{
+      res.status(404).json({message:"User doesn't exist"})
+    }
+  }catch(err){
+    res.status(500).json(err)
+  }
+}
+
+module.exports = { login, register, getUserById, verify, updatePassword,confirmUpdatePassword };
