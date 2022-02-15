@@ -10,6 +10,16 @@ const {
 } = require("../db");
 const nodemailer = require("nodemailer");
 
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "pf.grupo5@gmail.com",
+    pass: "iwyssmpfaiqpplkw",
+  },
+});
+
 const userRoles = {
   Client: UserClient,
   Admin: UserAdmin,
@@ -46,10 +56,10 @@ const login = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const { email, inputPassword, confirmPassword, firstName, lastName, role } =
+  const { email, inputPassword, confirmPassword, firstName, lastName } =
     req.body;
   try {
-    const existingUser = await userRoles[role].findOne({
+    const existingUser = await UserClient.findOne({
       where: {
         email,
       },
@@ -60,7 +70,7 @@ const register = async (req, res, next) => {
     if (inputPassword !== confirmPassword)
       return res.status(400).json({ message: "Password don't match." });
     const hashedPassword = await bcrypt.hash(inputPassword, 12);
-    const result = await userRoles[role].create({
+    const result = await UserClient.create({
       email,
       firstName,
       lastName,
@@ -73,16 +83,6 @@ const register = async (req, res, next) => {
       process.env.SECRET_WORD, //Deberia ser una palabra secreta
       { expiresIn: "24h" }
     );
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "pf.grupo5@gmail.com",
-        pass: "iwyssmpfaiqpplkw",
-      },
-    });
 
     transporter.verify().then(() => console.log("Listo para enviar mail"));
 
@@ -178,21 +178,11 @@ const updatePassword = async (req, res) => {
       }
     );
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "pf.grupo5@gmail.com",
-        pass: "iwyssmpfaiqpplkw",
-      },
-    });
-
     const mailOptions = {
       from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Cambio de contraseña ✔", // Subject line
-      html: `<p>Your password has been sucessfully changed :)</p>`, // html body
+      html: `<p>Su contraseña ha sido cambiada con exito :)</p>`, // html body
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) res.status(500).send(error.message);
@@ -222,16 +212,6 @@ const confirmUpdatePassword = async (req,res)=>{
         process.env.SECRET_WORD, //Deberia ser una palabra secreta
         { expiresIn: "24h" }
       );
-
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: "pf.grupo5@gmail.com",
-          pass: "iwyssmpfaiqpplkw",
-        },
-      });
   
       const mailOptions = {
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
