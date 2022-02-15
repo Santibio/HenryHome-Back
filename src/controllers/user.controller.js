@@ -217,6 +217,12 @@ const confirmUpdatePassword = async (req,res)=>{
       }
     })
     if(user){
+      const token = jwt.sign(
+        { email: email },
+        process.env.SECRET_WORD, //Deberia ser una palabra secreta
+        { expiresIn: "24h" }
+      );
+
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
@@ -231,7 +237,7 @@ const confirmUpdatePassword = async (req,res)=>{
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
-        html: `<p>If you want to change your password click following link: <a href='#' target='_blank'>change my password</a></p>`, // html body
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) res.status(500).send(error.message);
