@@ -5,7 +5,9 @@ const {
 const addFav = async (req, res, next)=>{
 const { HousingId } = req.body
 try{
-    const client = await UserClient.findByPk(req.userId)
+    const client = await UserClient.findByPk(req.userId,{
+        include: [{ model: Housing, as:"favs" }],
+      })
     
     await client.addFavs(HousingId)
     
@@ -17,7 +19,9 @@ try{
 const deleteFav = async (req, res, next)=>{
     const { HousingId } = req.body
     try{
-        const client = await UserClient.findByPk(req.userId)
+        const client = await UserClient.findByPk(req.userId,{
+            include: [{ model: Housing, as:"favs" }],
+          })
         
         await client.removeFavs(HousingId)
         
