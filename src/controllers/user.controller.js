@@ -10,11 +10,22 @@ const {
 } = require("../db");
 const nodemailer = require("nodemailer");
 
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "pf.grupo5@gmail.com",
+    pass: "iwyssmpfaiqpplkw",
+  },
+});
+
 const userRoles = {
   Client: UserClient,
   Admin: UserAdmin,
   Moderator: UserMod,
 };
+
 
 const login = async (req, res, next) => {
   const { email, inputPassword, role } = req.body;
@@ -25,17 +36,17 @@ const login = async (req, res, next) => {
       },
     });
     if (!existingUser)
-      return res.status(404).json({ message: "User doesn't exisit." });
+      return res.status(404).json({ message: "Usuario no existe" });
     const isPasswordCorrect = await bcrypt.compare(
       inputPassword,
       existingUser.password
     );
     
     if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Contraseña incorrecta" });
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser.id },
-      process.env.SECRET_WORD, //Deberia ser una palabra secreta
+      process.env.SECRET_WORD, 
       { expiresIn: "24h" }
     );
     const { password, ...userData } = existingUser.dataValues;
@@ -47,43 +58,33 @@ const login = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const { email, inputPassword, confirmPassword, firstName, lastName, role } =
+  const { email, inputPassword, confirmPassword, firstName, lastName } =
     req.body;
   try {
-    const existingUser = await userRoles[role].findOne({
+    const existingUser = await UserClient.findOne({
       where: {
         email,
       },
     });
-    if (existingUser && !existingUser.verify) return res.status(404).json({ message: "User needs to be verify." });
+    if (existingUser && !existingUser.verify) return res.status(400).json({ message: "El usuario necesita ser verificado" });
     if (existingUser && existingUser.verify)
-      return res.status(404).json({ message: "User already exisit." });
+      return res.json({ message: "El usuario ya existe" });
     if (inputPassword !== confirmPassword)
-      return res.status(400).json({ message: "Password don't match." });
+      return res.status(400).json({ message: "Las constraseña no concuerdan" });
     const hashedPassword = await bcrypt.hash(inputPassword, 12);
-    const result = await userRoles[role].create({
+    const result = await UserClient.create({
       email,
       firstName,
       lastName,
       password: hashedPassword,
-      role,
+     
     });
-
+  
     const token = jwt.sign(
-      { email: result.email, id: result.id, role: result.role },
+      { email: result.email, id: result.id},
       process.env.SECRET_WORD, //Deberia ser una palabra secreta
       { expiresIn: "24h" }
     );
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "pf.grupo5@gmail.com",
-        pass: "iwyssmpfaiqpplkw",
-      },
-    });
 
     transporter.verify().then(() => console.log("Listo para enviar mail"));
 
@@ -91,18 +92,19 @@ const register = async (req, res, next) => {
       from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Registro ✔", // Subject line
-      html: `<p>Thank you for registering at Henry Home, click on the following link to activate your account: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
+      html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
+      /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) res.status(500).send(error.message);
       else {
-        console.log("Email enviado");
+        console.log("E-mail enviado");
       }
     });
 
     const { password, ...userData } = result.dataValues;
-    res.json({ userData, token });
+    res.json({ userData, token, message: "E-mail enviado" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -144,8 +146,8 @@ const getUserById = async (req, res, next) => {
 const verify = async (req, res, next) => {
   const { token } = req.query;
   try {
-    const { id, role } = jwt.verify(token, process.env.SECRET_WORD);
-    const result = await userRoles[role].update(
+    const { id } = jwt.verify(token, process.env.SECRET_WORD);
+    const result = await UserClient.update(
       { verify: true },
       {
         where: {
@@ -153,18 +155,18 @@ const verify = async (req, res, next) => {
         },
       }
     );
-
     result >= 1
-      ? res.status(201).json({ msg: "User successfully verify" })
-      : res.json({ msg: "User not verify" });
+      ? res.status(201).json({ message: "Usuario correctamente verificado" })
+      : res.json({ message: "Usuario no verificado" });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
-const updatePassword = async (req, res) => {
+const updatePassword = async (req, res,next) => {
   const { role, email, newPassword } = req.body;
+  console.log(role, email, newPassword); //Faltaria un confirm password
   try {
     const newHashedPassword = await bcrypt.hash(newPassword, 12);
 
@@ -179,21 +181,11 @@ const updatePassword = async (req, res) => {
       }
     );
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "pf.grupo5@gmail.com",
-        pass: "iwyssmpfaiqpplkw",
-      },
-    });
-
     const mailOptions = {
       from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Cambio de contraseña ✔", // Subject line
-      html: `<p>Your password has been sucessfully changed :)</p>`, // html body
+      html: `<p>Su contraseña ha sido cambiada con exito :)</p>`, // html body
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) res.status(500).send(error.message);
@@ -201,8 +193,7 @@ const updatePassword = async (req, res) => {
         console.log("Email enviado");
       }
     });
-    res.status(200).json({msg:'Password changed!'})
-    next()
+    res.status(200).json({message:'Contraseña cambiada!'})
   } catch (error) {
     console.log(error);
     next(error);
@@ -211,6 +202,7 @@ const updatePassword = async (req, res) => {
 
 const confirmUpdatePassword = async (req,res)=>{
   const { email } = req.body
+  console.log({email})
   try{
     const user = await UserClient.findAll({
       where:{
@@ -218,21 +210,18 @@ const confirmUpdatePassword = async (req,res)=>{
       }
     })
     if(user){
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: "pf.grupo5@gmail.com",
-          pass: "iwyssmpfaiqpplkw",
-        },
-      });
+      const token = jwt.sign(
+        { email: email },
+        process.env.SECRET_WORD, //Deberia ser una palabra secreta
+        { expiresIn: "24h" }
+      );
   
       const mailOptions = {
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
-        html: `<p>If you want to change your password click following link: <a href='#' target='_blank'>change my password</a></p>`, // html body
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+       /*  html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, */ // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) res.status(500).send(error.message);
@@ -241,10 +230,10 @@ const confirmUpdatePassword = async (req,res)=>{
         }
       });
   
-      res.status(200).json({message:"Mail sent"})
+      res.status(200).json({message:"E-Mail enviado"})
     }
     else{
-      res.status(404).json({message:"User doesn't exist"})
+      res.status(404).json({message:"Usuario no existe"})
     }
   }catch(err){
     res.status(500).json(err)
