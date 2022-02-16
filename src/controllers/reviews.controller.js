@@ -12,11 +12,11 @@ const createReview = async (req, res, next) => {
       return res
         .status(400)
         .json({
-          message: "You cant post more than one review in the same post",
+          message: "No puees publicar mas de una review por post",
         });
     }
     if (stars < 1 || stars > 5) {
-      return res.status(400).json({ message: "stars value must to be (1-5)" });
+      return res.status(400).json({ message: "El valor de estrellas debe ir del 1 al 5" });
     }
     const newReview = await Reviews.create({ stars, description });
     await newReview.setUserClient(req.userId);
@@ -37,7 +37,7 @@ const patchReview = async (req, res, next) => {
       return res
         .status(400)
         .json({
-          message: "You must to be the creator user to update this Review",
+          message: "Necesitas ser el creador de una review para modificarla",
         });
     }
     const New = await Reviews.update({ stars, description }, { where: { id } });
@@ -46,8 +46,8 @@ const patchReview = async (req, res, next) => {
       .status(200)
       .json(
         New
-          ? { message: "Changes were applied" }
-          : { message: "Something went rong" }
+          ? { message: "Se aplicaron los cambios" }
+          : { message: "Algo ha salido mal" }
       );
   } catch (error) {
     console.log(error);
@@ -63,7 +63,7 @@ const deleteReview = async (req, res, next) => {
       return res
         .status(400)
         .json({
-          message: "You must to be the creator user to delete this Review",
+          message: "Debes ser el creador para eliminar una review",
         });
     }
     const a = await Reviews.destroy({ where: { id } });
@@ -72,8 +72,8 @@ const deleteReview = async (req, res, next) => {
       .status(200)
       .json(
         a
-          ? { message: "The review was destroyed" }
-          : { message: "Something went rong" }
+          ? { message: "Se elimino la review" }
+          : { message: "Algo ha salido mal" }
       );
   } catch (error) {
     console.log(error);

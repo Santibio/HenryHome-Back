@@ -189,7 +189,7 @@ const deleteHouse = async (req, res, next) => {
         id,
       },
     });
-    res.json({ msg: "Successfully deleted" });
+    res.json({ message: "La casa se ha eliminado correctamente" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -208,8 +208,8 @@ const AdminChangeHousing = async (req, res, next) => {
     );
 
     result >= 1
-      ? res.status(201).json({ msg: "Successfully changed" })
-      : res.json({ msg: "House not changed" });
+      ? res.status(201).json({ message: "Los cambios fueron aplicados" })
+      : res.json({ message: "Algo ha salido mal" });
   } catch (error) {
     console.log(error);
     next(error);

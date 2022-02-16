@@ -7,7 +7,7 @@ const createReservation = async (req, res) => {
 
   try {
     if (!id_hotel || !date_start || !date_end || !detail) {
-      return res.json(400).json({ msg: "Data needed!" });
+      return res.json(400).json({ message: "Se requiere mas informacion!" });
     }
     const hotel = await Housing.findByPk(id_hotel);
     const amount = daysCalculator(date_start, date_end) * hotel.pricePerNight;
@@ -20,7 +20,7 @@ const createReservation = async (req, res) => {
     });
     const available = await validateDate(id_hotel, date_start, date_end);
     if(!available){
-        return res.status(404).json({msg: 'Date already taken'})
+        return res.status(404).json({message: 'Esta fecha esta ocupada'})
     }
     await newReservation.setOrder(order.id);
     await newReservation.setUserClient(req.userId);
@@ -45,7 +45,7 @@ const updateReservation = async (req, res) => {
         },
       }
     );
-    res.status(200).json({ msg: "Reservation updated" });
+    res.status(200).json({ message: "Se ha actualizado la reserva" });
   } catch (error) {
     console.log(error);
     next(error);
