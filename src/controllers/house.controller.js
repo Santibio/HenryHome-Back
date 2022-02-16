@@ -12,7 +12,7 @@ const  filter  = require("../libs/Filter")
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
-  const ubicacion = req.body.location? {name:req.body.location} : null
+  const ubicacion = req.query.location? {name:req.query.location} : null
   filter(req)
   try {
 
@@ -56,8 +56,8 @@ const getHouses = async (req, res, next) => {
 
      var c=0;
     
-     if(req.body.stars&&HousePage.rows.length){
-       HousePage.rows = HousePage.rows.filter(e=>{if(e.average<= req.body.stars) return true; c++})
+     if(req.query.stars&&HousePage.rows.length){
+       HousePage.rows = HousePage.rows.filter(e=>{if(e.average<= req.query.stars) return true; c++})
      }
     HousePage.count = count.count-c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
     
