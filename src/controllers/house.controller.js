@@ -8,29 +8,31 @@ const {
   Reviews,
 } = require("../db");
 const { buscar } = require("../libs/buscar");
-const  filter  = require("../libs/Filter")
+const filter = require("../libs/Filter");
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
-  const ubicacion = req.body.location? {name:req.body.location} : null
-  filter(req)
+  const ubicacion = req.body.location ? { name: req.body.location } : null;
+  filter(req);
   try {
-
     const Offset = size * (page - 1);
 
-    const count = await Housing.findAndCountAll({where: filter(req),include: [
-      {
-        model: Location,
-        where: ubicacion,
-        required:true
-      }]});
+    const count = await Housing.findAndCountAll({
+      where: filter(req),
+      include: [
+        {
+          model: Location,
+          where: ubicacion,
+          required: true,
+        },
+      ],
+    });
 
     const HousePage = await Housing.findAndCountAll({
       limit: size,
       offset: Offset,
       where: filter(req),
       attributes: {
-        
         exclude: [
           "createdAt",
           "updatedAt",
@@ -43,24 +45,26 @@ const getHouses = async (req, res, next) => {
         {
           model: Location,
           where: ubicacion,
-          required:true
+          required: true,
         },
         { model: Facilities },
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
         { model: Reviews, attributes: ["stars"] },
         { model: Reservations },
-        
       ],
     });
 
-     var c=0;
-    
-     if(req.body.stars&&HousePage.rows.length){
-       HousePage.rows = HousePage.rows.filter(e=>{if(e.average<= req.body.stars) return true; c++})
-     }
-    HousePage.count = count.count-c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
-    
+    var c = 0;
+
+    if (req.body.stars && HousePage.rows.length) {
+      HousePage.rows = HousePage.rows.filter((e) => {
+        if (e.average <= req.body.stars) return true;
+        c++;
+      });
+    }
+    HousePage.count = count.count - c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
+
     res.json(HousePage);
   } catch (error) {
     console.log(error);
@@ -77,10 +81,7 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
-        {
-          model: Reservations,
-          attributes: ["date_start", "date_end", "userClientId"],
-        },
+        { model: Reservations},
         { model: Reviews },
       ],
     });
@@ -202,7 +203,7 @@ const AdminChangeHousing = async (req, res, next) => {
       { status: status },
       {
         where: {
-          id
+          id,
         },
       }
     );
@@ -223,5 +224,4 @@ module.exports = {
   updateHouse,
   deleteHouse,
   AdminChangeHousing,
-  
 };

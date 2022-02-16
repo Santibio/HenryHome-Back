@@ -45,6 +45,7 @@ const createReservation = async (req, res, next) => {
       date_end,
       detail,
       id_mercado_pago: mercadoPagoResponse.body.id,
+      link_mercado_pago: mercadoPagoResponse.body.init_point,
     });
     const available = await validateDate(id_hotel, date_start, date_end);
     if (!available) {

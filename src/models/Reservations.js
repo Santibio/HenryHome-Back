@@ -32,6 +32,8 @@ module.exports = (sequelize) => {
         defaultValue: "Pending",
       },
       id_mercado_pago: { type: DataTypes.STRING, allowNull: false },
+      link_mercado_pago: { type: DataTypes.STRING, allowNull: false },
+
     },
     { timestamps: true }
   );
