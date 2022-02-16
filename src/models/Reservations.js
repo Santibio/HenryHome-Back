@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        unique:true
+        unique: true,
       },
       id_hotel: {
         type: DataTypes.STRING,
@@ -19,19 +19,19 @@ module.exports = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      date_end:{
+      date_end: {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      detail:{
+      detail: {
         type: DataTypes.TEXT,
         allowNull: false,
-      }
-      ,
-      status:{
+      },
+      status: {
         type: DataTypes.STRING,
         defaultValue: "Pending",
-      }
+      },
+      id_mercado_pago: { type: DataTypes.STRING, allowNull: false },
     },
     { timestamps: true }
   );
