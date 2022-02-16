@@ -218,8 +218,8 @@ const confirmUpdatePassword = async (req,res)=>{
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
-        /* html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body */
-        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+        /* html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, */ // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) res.status(500).send(error.message);
