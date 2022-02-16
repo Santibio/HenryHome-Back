@@ -41,6 +41,7 @@ const login = async (req, res, next) => {
       inputPassword,
       existingUser.password
     );
+    
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Contraseña incorrecta" });
     const token = jwt.sign(
@@ -115,7 +116,7 @@ const getUserById = async (req, res, next) => {
   try {
     let user;
     if (role === "Client") {
-
+      
       user = await userRoles[role].findByPk(id,{
 
         include: [{ model: Reservations },
