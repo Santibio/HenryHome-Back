@@ -26,6 +26,7 @@ const userRoles = {
   Moderator: UserMod,
 };
 
+
 const login = async (req, res, next) => {
   const { email, inputPassword, role } = req.body;
   try {
@@ -35,16 +36,16 @@ const login = async (req, res, next) => {
       },
     });
     if (!existingUser)
-      return res.status(404).json({ message: "User doesn't exisit." });
+      return res.status(404).json({ message: "Usuario no existe" });
     const isPasswordCorrect = await bcrypt.compare(
       inputPassword,
       existingUser.password
     );
     if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Contraseña incorrecta" });
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser.id },
-      process.env.SECRET_WORD, //Deberia ser una palabra secreta
+      process.env.SECRET_WORD, 
       { expiresIn: "24h" }
     );
     const { password, ...userData } = existingUser.dataValues;
@@ -64,11 +65,11 @@ const register = async (req, res, next) => {
         email,
       },
     });
-    if (existingUser && !existingUser.verify) return res.status(400).json({ message: "User needs to be verify." });
+    if (existingUser && !existingUser.verify) return res.status(400).json({ message: "El usuario necesita ser verificado" });
     if (existingUser && existingUser.verify)
-      return res.json({ message: "User already exisit." });
+      return res.json({ message: "El usuario ya existe" });
     if (inputPassword !== confirmPassword)
-      return res.status(400).json({ message: "Password don't match." });
+      return res.status(400).json({ message: "Las constraseña no concuerdan" });
     const hashedPassword = await bcrypt.hash(inputPassword, 12);
     const result = await UserClient.create({
       email,
@@ -90,18 +91,19 @@ const register = async (req, res, next) => {
       from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Registro ✔", // Subject line
-      html: `<p>Thank you for registering at Henry Home, click on the following link to activate your account: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
+      html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
+      /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) res.status(500).send(error.message);
       else {
-        console.log("Email enviado");
+        console.log("E-mail enviado");
       }
     });
 
     const { password, ...userData } = result.dataValues;
-    res.json({ userData, token });
+    res.json({ userData, token, message: "E-mail enviado" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -143,8 +145,8 @@ const getUserById = async (req, res, next) => {
 const verify = async (req, res, next) => {
   const { token } = req.query;
   try {
-    const { id, role } = jwt.verify(token, process.env.SECRET_WORD);
-    const result = await userRoles[role].update(
+    const { id } = jwt.verify(token, process.env.SECRET_WORD);
+    const result = await UserClient.update(
       { verify: true },
       {
         where: {
@@ -152,10 +154,9 @@ const verify = async (req, res, next) => {
         },
       }
     );
-
     result >= 1
-      ? res.status(201).json({ msg: "User successfully verify" })
-      : res.json({ msg: "User not verify" });
+      ? res.status(201).json({ message: "Usuario correctamente verificado" })
+      : res.json({ message: "Usuario no verificado" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -164,7 +165,7 @@ const verify = async (req, res, next) => {
 
 const updatePassword = async (req, res,next) => {
   const { role, email, newPassword } = req.body;
-  console.log(role, email, newPassword); //Faltaria un confirm
+  console.log(role, email, newPassword); //Faltaria un confirm password
   try {
     const newHashedPassword = await bcrypt.hash(newPassword, 12);
 
@@ -191,7 +192,7 @@ const updatePassword = async (req, res,next) => {
         console.log("Email enviado");
       }
     });
-    res.status(200).json({msg:'Password changed!'})
+    res.status(200).json({message:'Contraseña cambiada!'})
   } catch (error) {
     console.log(error);
     next(error);
@@ -219,7 +220,7 @@ const confirmUpdatePassword = async (req,res)=>{
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
         html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
-        /* html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, */ // html body
+       /*  html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, */ // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) res.status(500).send(error.message);
@@ -228,10 +229,10 @@ const confirmUpdatePassword = async (req,res)=>{
         }
       });
   
-      res.status(200).json({message:"Mail sent"})
+      res.status(200).json({message:"E-Mail enviado"})
     }
     else{
-      res.status(404).json({message:"User doesn't exist"})
+      res.status(404).json({message:"Usuario no existe"})
     }
   }catch(err){
     res.status(500).json(err)
