@@ -4,7 +4,7 @@ const { UserAdmin, UserClient, UserMod } = require("../db");
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-
+    console.log({token});
     const isCustomAuth = token.length < 500;
     let decodedData;
 
