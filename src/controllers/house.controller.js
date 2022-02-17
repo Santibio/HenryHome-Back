@@ -196,6 +196,7 @@ const deleteHouse = async (req, res, next) => {
     next(error);
   }
 };
+
 const AdminChangeHousing = async (req, res, next) => {
   try {
     const { status, id } = req.body;

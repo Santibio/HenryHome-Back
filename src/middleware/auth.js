@@ -22,10 +22,15 @@ const verifyToken = async (req, res, next) => {
     next(error);
   }
 };
+
 const isModerador = async (req, res, next) => {
   try {
-    const modID = req.userId;
-    const Mod = await UserMod.findOne({ where: { id: modID } });
+     const userClient = await UserClient.findByPk(req.userId);
+
+     const { email } =
+       userClient.dataValues;
+
+    const Mod = await UserMod.findOne({ where: { email } });
     if (Mod) {
       next();
     } else {

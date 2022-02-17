@@ -118,6 +118,9 @@ Reservations.belongsTo(Order, { timestamps: false });
 UserMod.hasMany(Housing, { timestamps: false });
 Housing.belongsTo(UserMod), { timestamps: false };
 
+UserMod.hasOne(UserClient, { timestamps: false });
+UserClient.belongsTo(UserMod, { timestamps: false });
+
 
 
 module.exports = {

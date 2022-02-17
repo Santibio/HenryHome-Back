@@ -54,9 +54,7 @@ const createReservation = async (req, res, next) => {
     await newReservation.setOrder(order.id);
     await newReservation.setUserClient(req.userId);
     await newReservation.setHousing(id_hotel);
-
-    console.log(mercadoPagoResponse.body.id);
-    console.log(mercadoPagoResponse.body.init_point);
+    
     res.status(201).json({
       newReservation,
       order,
