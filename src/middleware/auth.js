@@ -25,12 +25,8 @@ const verifyToken = async (req, res, next) => {
 
 const isModerador = async (req, res, next) => {
   try {
-     const userClient = await UserClient.findByPk(req.userId);
-
-     const { email } =
-       userClient.dataValues;
-
-    const Mod = await UserMod.findOne({ where: { email } });
+    
+    const Mod = await UserMod.findByPk(req.userId);
     if (Mod) {
       next();
     } else {
