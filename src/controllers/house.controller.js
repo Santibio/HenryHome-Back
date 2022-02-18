@@ -8,28 +8,36 @@ const {
   Reviews,
 } = require("../db");
 const { buscar } = require("../libs/buscar");
-const  filter  = require("../libs/Filter")
+const filter = require("../libs/Filter");
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
   const ubicacion = req.query.location? {name:req.query.location} : null
+<<<<<<< HEAD
   try {
+=======
+  filter(req)
+>>>>>>> ca621fc7f495b83dac5b0f3e6a06c58986727bbc
 
+  try {
     const Offset = size * (page - 1);
 
-    const count = await Housing.findAndCountAll({where: filter(req),include: [
-      {
-        model: Location,
-        where: ubicacion,
-        required:true
-      }]});
+    const count = await Housing.findAndCountAll({
+      where: filter(req),
+      include: [
+        {
+          model: Location,
+          where: ubicacion,
+          required: true,
+        },
+      ],
+    });
 
     const HousePage = await Housing.findAndCountAll({
       limit: size,
       offset: Offset,
       where: filter(req),
       attributes: {
-        
         exclude: [
           "createdAt",
           "updatedAt",
@@ -42,16 +50,16 @@ const getHouses = async (req, res, next) => {
         {
           model: Location,
           where: ubicacion,
-          required:true
+          required: true,
         },
         { model: Facilities },
         { model: Services },
         { model: UserMod, attributes: ["id", "email"] },
         { model: Reviews, attributes: ["stars"] },
         { model: Reservations },
-        
       ],
     });
+
 
      var c=0;
     console.log(req.query.stars)
@@ -81,10 +89,7 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
-        {
-          model: Reservations,
-          attributes: ["date_start", "date_end", "userClientId"],
-        },
+        { model: Reservations},
         { model: Reviews },
       ],
     });
@@ -199,6 +204,7 @@ const deleteHouse = async (req, res, next) => {
     next(error);
   }
 };
+
 const AdminChangeHousing = async (req, res, next) => {
   try {
     const { status, id } = req.body;
@@ -206,7 +212,7 @@ const AdminChangeHousing = async (req, res, next) => {
       { status: status },
       {
         where: {
-          id
+          id,
         },
       }
     );
@@ -227,5 +233,4 @@ module.exports = {
   updateHouse,
   deleteHouse,
   AdminChangeHousing,
-  
 };

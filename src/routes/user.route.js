@@ -5,8 +5,10 @@ const {
   getUserById,
   verify,
   updatePassword,
-  confirmUpdatePassword
+  confirmUpdatePassword,
+  updateModerator, 
 } = require("../controllers/user.controller.js"); 
+const { verifyToken } = require('../middleware/auth.js');
 const router = Router()
 
 
@@ -16,4 +18,5 @@ router.post("/register", register)
 router.post("/verify", verify)
 router.post('/confirm-update-password',confirmUpdatePassword)
 router.put('/change-password',updatePassword)
+router.post("/moderator", verifyToken, updateModerator);
 module.exports = router

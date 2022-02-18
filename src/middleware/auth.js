@@ -4,7 +4,7 @@ const { UserAdmin, UserClient, UserMod } = require("../db");
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-
+    console.log({token});
     const isCustomAuth = token.length < 500;
     let decodedData;
 
@@ -22,10 +22,11 @@ const verifyToken = async (req, res, next) => {
     next(error);
   }
 };
+
 const isModerador = async (req, res, next) => {
   try {
-    const modID = req.userId;
-    const Mod = await UserMod.findOne({ where: { id: modID } });
+    
+    const Mod = await UserMod.findByPk(req.userId);
     if (Mod) {
       next();
     } else {
