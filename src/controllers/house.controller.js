@@ -58,7 +58,6 @@ const getHouses = async (req, res, next) => {
 
 
      var c=0;
-    console.log(req.query.stars)
      if(req.query.stars&&HousePage.rows.length){
        HousePage.rows = HousePage.rows.filter(e=>{
        
