@@ -13,11 +13,7 @@ const filter = require("../libs/Filter");
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
   const ubicacion = req.query.location? {name:req.query.location} : null
-<<<<<<< HEAD
-  try {
-=======
-  filter(req)
->>>>>>> ca621fc7f495b83dac5b0f3e6a06c58986727bbc
+  
 
   try {
     const Offset = size * (page - 1);
