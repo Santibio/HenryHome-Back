@@ -50,6 +50,7 @@ const serverPreparation = async () => {
           description: e.description,
           houseRules: e.houseRules,
           images: e.images,
+          status: e.status
         },
       });
       var servicesDB = await Services.findAll({
