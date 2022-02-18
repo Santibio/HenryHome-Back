@@ -12,10 +12,10 @@ const createFacilitie = async (req, res, next) => {
       .status(201)
       .json(
         result
-          ? { msg: "Correctly created facility",  facility }
-          : { msg: "There is already a facility with that name", facility })
+          ? { message: "La instalacion se creo correctamente",  facility }
+          : { message: "Ya existe una instalacion con ese nombre", facility })
     } else {
-      res.status(400).json({ msg: "Name needed" });
+      res.status(400).json({ message: "La casilla de nombre es obligatoria" });
     }
   } catch (error) {
     console.log(error);

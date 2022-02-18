@@ -30,7 +30,7 @@ const isModerador = async (req, res, next) => {
     if (Mod) {
       next();
     } else {
-      return res.status(403).json({ message: "You are not a Moderator" });
+      return res.status(403).json({ message: "Necesitas ser moderador para realizar esta tarea" });
     }
   } catch (error) {
     next(error);
@@ -45,7 +45,7 @@ const isAdmin = async (req, res, next) => {
     if (Admin) {
       next();
     } else {
-      return res.status(403).json({ message: "You are not a Admin" });
+      return res.status(403).json({ message: "Necesitas ser administrador para realizar esta tarea" });
     }
   } catch (error) {
     next(error);

@@ -12,11 +12,11 @@ const createService = async (req, res) => {
         .status(201)
         .json(
           result
-            ? { msg: "Correctly created service", service }
-            : { msg: "There is already a service with that name", service }
+            ? { message: "El servicio se ha creado correctamente", service }
+            : { message: "Ya existe un servicio con ese nombre", service }
         );
     } else {
-      res.status(400).json({ msg: "Data needed" });
+      res.status(400).json({ message: "Se requiere mas informacion" });
     }
   } catch (error) {
     console.log(error);

@@ -4,6 +4,7 @@ const { servicesArray } = require("../config_db/services.array");
 const { Facilities, Location, Services, UserMod, Housing } = require("../db");
 const { userMod } = require("../config_db/usersMod");
 const { housesArray } = require("../config_db/houses.array");
+const { Op } = require("sequelize");
 
 const serverPreparation = async () => {
   try {
@@ -64,6 +65,17 @@ const serverPreparation = async () => {
       await house.setLocation(e.location);
       await house.setUserMod(userDemo.id);
     });
+    const ids = await Housing.findAll({limit:6})
+    const Ids = ids.map(e=>e.id)
+    console.log(Ids)
+    await Housing.update(
+      { status: "Accepted" },
+      {
+        where: {
+          id:{ [Op.in]:Ids}
+        },
+      }
+    );
 
     console.log("Listo");
   } catch (error) {

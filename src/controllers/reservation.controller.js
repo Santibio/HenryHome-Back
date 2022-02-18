@@ -8,6 +8,7 @@ const createReservation = async (req, res, next) => {
   console.log(req.body);
   try {
     if (!id_hotel || !date_start || !date_end || !detail) {
+
       return res.json(400).json({ message: "Se necesitan datos" });
     }
     const hotel = await Housing.findByPk(id_hotel);
@@ -48,6 +49,7 @@ const createReservation = async (req, res, next) => {
       link_mercado_pago: mercadoPagoResponse.body.init_point,
     });
     const available = await validateDate(id_hotel, date_start, date_end);
+
     if (!available) {
       return res.status(404).json({ message: "Fecha ya tomada" });
     }
@@ -80,6 +82,7 @@ const updateReservation = async (req, res) => {
         },
       }
     );
+
     res.status(200).json({ message: "Reserva actualizada" });
   } catch (error) {
     console.log(error);
