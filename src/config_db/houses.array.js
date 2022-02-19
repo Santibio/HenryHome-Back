@@ -133,6 +133,7 @@ const housesArray = [
     facilities: ["washing machine"],
     location: 8,
     images: ["https://www.ecartelera.com/images/sets/16500/16595.jpg"],
+    status: "Accepted",
   },
   {
     name: "Fabrica de Chocolate",
@@ -147,6 +148,7 @@ const housesArray = [
     facilities: ["tv", "wifi"],
     location: 9,
     images: ["https://img.ecartelera.com/noticias/fotos/40500/40521/2.jpg"],
+    status: "Accepted",
   },
   {
     name: "demo10",
@@ -163,6 +165,7 @@ const housesArray = [
     images: [
       "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
     ],
+    status: "Accepted",
   },
   {
     name: "demo11",
@@ -179,6 +182,7 @@ const housesArray = [
     images: [
       "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
     ],
+    status: "Accepted",
   },
   {
     name: "demo12",
@@ -195,6 +199,7 @@ const housesArray = [
     images: [
       "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
     ],
+    status: "Accepted",
   },
 ];
 
