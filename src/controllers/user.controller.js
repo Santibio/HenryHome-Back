@@ -47,6 +47,7 @@ const login = async (req, res, next) => {
 
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Contraseña incorrecta" });
+
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser.id },
       process.env.SECRET_WORD,
@@ -280,6 +281,62 @@ const updateModerator = async (req, res, next) => {
   }
 };
 
+const googleLogIn = async (req, res, next)=>{
+
+  try{
+    const {email, familyName, givenName, googleId, imageUrl, role} = req.body
+
+    const existingUser = await userRoles[role].findOne({
+      where: {
+        email,
+      },
+    });
+    if (existingUser){
+
+      const isPasswordCorrect = await bcrypt.compare(
+        googleId,
+        existingUser.password
+      );
+      if (!isPasswordCorrect)
+      return res.status(400).json({ message: "Este Email ya ha sido utilizado" });
+      
+      const token = jwt.sign(
+      { email: existingUser.email, id: existingUser.id },
+      process.env.SECRET_WORD,
+      { expiresIn: "24h" }
+    );
+
+    const { password, ...userData } = existingUser.dataValues;
+    res.json({ result: userData, token });
+      
+    }else{
+      const hashedPassword = await bcrypt.hash(googleId, 12);
+      const result = await userRoles[role].create({
+        email,
+        firstName:givenName,
+        lastName:familyName,
+        password: hashedPassword,
+        profile_img:imageUrl,
+        role,
+        verify: true
+      });
+      const token = jwt.sign(
+        { email: result.email, id: result.id },
+        process.env.SECRET_WORD, //Deberia ser una palabra secreta
+        { expiresIn: "24h" }
+      );
+
+      const { password, ...userData } = result.dataValues;
+    return res.json({ userData, token });
+
+    }
+    
+  }catch(error){
+    console.log(error);
+    next(error);
+  }
+}
+
 module.exports = {
   login,
   register,
@@ -288,4 +345,5 @@ module.exports = {
   updatePassword,
   confirmUpdatePassword,
   updateModerator,
+  googleLogIn,
 };
