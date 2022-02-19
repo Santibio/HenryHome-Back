@@ -129,6 +129,7 @@ const getUserById = async (req, res, next) => {
           { model: Reservations },
           { model: Reviews },
           { model: Housing, as: "favs" },
+          
         ],
       });
     }

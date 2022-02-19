@@ -1,4 +1,4 @@
-const facilitiesArray = ['Wifi','smoke detector','TV','dishwasher','washing machine','Air conditioning ']
+const facilitiesArray = ['wifi','detector de humo','tv','lavaplatos','aire acondicionado']
 
 
 module.exports = {

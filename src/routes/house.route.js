@@ -19,6 +19,6 @@ router.get("/:id", getHouseById)
 router.post("/",[verifyToken,isModerador],createHouse)
 router.patch("/",[verifyToken,isModerador], updateHouse)
 router.patch("/status",AdminChangeHousing);
-router.delete("/", deleteHouse)
+router.delete("/:id",[verifyToken,isModerador], deleteHouse)
 
 module.exports = router
