@@ -58,7 +58,6 @@ const getHouses = async (req, res, next) => {
 
 
      var c=0;
-    console.log(req.query.stars)
      if(req.query.stars&&HousePage.rows.length){
        HousePage.rows = HousePage.rows.filter(e=>{
        
@@ -66,10 +65,8 @@ const getHouses = async (req, res, next) => {
      }
     HousePage.count = count.count-c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
     
-    res.json(HousePage?.length ? 
-      HousePage :
-      {message:"Error 404"}
-      );
+    
+    res.status(200).json(HousePage?.rows.length? HousePage : {message:"Error 404"});
   } catch (error) {
     console.log(error);
     next(error);
