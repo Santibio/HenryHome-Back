@@ -305,8 +305,9 @@ const googleLogIn = async (req, res, next)=>{
       process.env.SECRET_WORD,
       { expiresIn: "24h" }
     );
-
+        
     const { password, ...userData } = existingUser.dataValues;
+    console.log("Login google")
     res.json({ result: userData, token });
       
     }else{
@@ -325,9 +326,10 @@ const googleLogIn = async (req, res, next)=>{
         process.env.SECRET_WORD, //Deberia ser una palabra secreta
         { expiresIn: "24h" }
       );
-
+        
       const { password, ...userData } = result.dataValues;
-    return res.json({ userData, token });
+      console.log("Register google")
+    return res.json({ result: userData, token });
 
     }
     
