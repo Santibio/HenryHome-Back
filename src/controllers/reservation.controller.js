@@ -90,7 +90,23 @@ const updateReservation = async (req, res) => {
   }
 };
 
+
+const cancelReservation = async (req,res)=>{
+  const { id } = req.body
+  try{
+    await Reservations.destroy({
+      where:{
+        id:id
+      }
+    })
+    res.status(200).json({message:'Reservation deleted'})
+  }catch(err){
+    res.status(500).json(err)
+  }
+}
+
 module.exports = {
   createReservation,
   updateReservation,
+  cancelReservation
 };
