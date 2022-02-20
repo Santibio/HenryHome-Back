@@ -1,4 +1,4 @@
-const servicesArray = ['catering','shops ','room service','pool','gym','sauna']
+const servicesArray = ['catering','shops','room service','pileta','gym','sauna']
 
 
 module.exports = {

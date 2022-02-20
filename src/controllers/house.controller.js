@@ -13,8 +13,7 @@ const filter = require("../libs/Filter");
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
-  const ubicacion = req.query.location? {name:req.query.location} : null
-  
+  const ubicacion = req.query.location ? { name: req.query.location } : null;
 
   try {
     const Offset = size * (page - 1);
@@ -57,17 +56,18 @@ const getHouses = async (req, res, next) => {
       ],
     });
 
+    var c = 0;
+    if (req.query.stars && HousePage.rows.length) {
+      HousePage.rows = HousePage.rows.filter((e) => {
+        if (e.average >= req.query.stars) return true;
+        c++;
+      });
+    }
+    HousePage.count = count.count - c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
 
-     var c=0;
-     if(req.query.stars&&HousePage.rows.length){
-       HousePage.rows = HousePage.rows.filter(e=>{
-       
-        if(e.average >= req.query.stars) return true; c++})
-     }
-    HousePage.count = count.count-c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
-    
-    
-    res.status(200).json(HousePage?.rows.length? HousePage : {message:"Error 404"});
+    res
+      .status(200)
+      .json(HousePage?.rows.length ? HousePage : { message: "Error 404" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -148,6 +148,7 @@ const updateHouse = async (req, res, next) => {
   const { id } = req.body;
   try {
     const prev = await Housing.findByPk(id);
+    console.log(req.body);
     const {
       name = prev.name,
       pricePerNight = prev.pricePerNight,
@@ -156,12 +157,17 @@ const updateHouse = async (req, res, next) => {
       description = prev.description,
       houseRules = prev.houseRules,
       images = prev.images,
+      services,
+      facilities,
+      location,
     } = req.body;
+
     const housecheck = await Housing.findByPk(id);
-    console.log(housecheck);
-    if (housecheck.userModId === req.userId) {
-      console.log("Es el mismo usuario, (no se aplico esta proiedad)");
+
+    if (housecheck.userModId !== req.userId) {
+      return res.status(401).json({ message: "No es el dueño de esta casa" });
     }
+    
     await Housing.update(
       {
         name,
@@ -171,16 +177,31 @@ const updateHouse = async (req, res, next) => {
         description,
         houseRules,
         images,
+        status: "Pending",
       },
       {
         where: {
-          id: id,
+          id,
         },
       }
     );
-    const resp = await Housing.findAll({ where: { id: id } });
 
-    res.status(200).send(resp);
+    const houseUpdated = await Housing.findByPk(id);
+
+    let servicesDB = await Services.findAll({
+      where: { name: services },
+    });
+    let facilitiesDB = await Facilities.findAll({
+      where: { name: facilities },
+    });
+
+    await houseUpdated.setServices(servicesDB);
+    await houseUpdated.setFacilities(facilitiesDB);
+    await houseUpdated.setLocation(location[0].id);
+
+    res
+      .status(201)
+      .json({ houseUpdated, message: "Casa modificada correctamente" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -188,14 +209,16 @@ const updateHouse = async (req, res, next) => {
 };
 
 const deleteHouse = async (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
+
+  console.log({ id }, "aca");
   try {
     const house = await Housing.destroy({
       where: {
         id,
       },
     });
-    res.json({ message: "La casa se ha eliminado correctamente" });
+    res.status(201).json({ message: "La casa se ha eliminado correctamente" });
   } catch (error) {
     console.log(error);
     next(error);
