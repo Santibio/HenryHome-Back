@@ -84,7 +84,7 @@ const getHouseById = async (req, res, next) => {
         { model: Services },
         { model: UserMod },
         { model: Reservations },
-        { model: Reviews,order: [['updatedAt', 'ASC']] ,include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
+        { model: Reviews,order: [['updatedAt', 'DESC']] ,include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
       ],
     });
     res.json(Houses);
