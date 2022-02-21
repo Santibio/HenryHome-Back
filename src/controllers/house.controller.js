@@ -4,6 +4,7 @@ const {
   Facilities,
   Services,
   UserMod,
+  UserClient,
   Reservations,
   Reviews,
 } = require("../db");
@@ -82,8 +83,8 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
-        { model: Reservations },
-        { model: Reviews },
+        { model: Reservations},
+        { model: Reviews, include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
       ],
     });
     res.json(Houses);
@@ -121,15 +122,18 @@ const createHouse = async (req, res, next) => {
       },
     });
 
-    let servicesDB = await Services.findAll({
+    let servicesDB = services ? 
+    await Services.findAll({
       where: { name: services },
-    });
-    let facilitiesDB = await Facilities.findAll({
+    }) : null
+    let facilitiesDB = facilities ?
+     await Facilities.findAll({
       where: { name: facilities },
-    });
+    }) : null
 
     await house.addServices(servicesDB);
     await house.addFacilities(facilitiesDB);
+    
     await house.setLocation(location);
     await house.setUserMod(req.userId);
 
