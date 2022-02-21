@@ -104,12 +104,12 @@ const register = async (req, res, next) => {
       /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) res.status(500).send(error.message);
+    /* transporter.sendMail(mailOptions, (error, info) => {
+      if (error) console.log(error);
       else {
         console.log("E-mail enviado");
       }
-    });
+    }); */
 
     const { password, ...userData } = result.dataValues;
     res.json({ userData, token, message: "E-mail enviado" });

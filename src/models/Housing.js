@@ -37,7 +37,10 @@ module.exports = (sequelize) => {
       defaultValue: "Pending",
     },
     images: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+    },
+    image:{
+       type: DataTypes.TEXT,
     },
     average: {
       type: DataTypes.VIRTUAL,
