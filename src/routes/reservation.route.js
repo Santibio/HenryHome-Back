@@ -3,7 +3,7 @@ const { createReservation , updateReservation , cancelReservation } = require('.
 const { verifyToken, isModerador, isAdmin } = require("../middleware/auth.js");
 
 router.post("/",verifyToken,createReservation)
-router.delete('/',cancelReservation)
+router.delete('/:id',cancelReservation)
 router.put("/",updateReservation)
 
 module.exports = router
