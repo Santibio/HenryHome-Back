@@ -83,8 +83,8 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
-        { model: Reservations},
-        { model: Reviews, include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
+        { model: Reservations },
+        { model: Reviews,order: [['updatedAt', 'DESC']] ,include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
       ],
     });
     res.json(Houses);

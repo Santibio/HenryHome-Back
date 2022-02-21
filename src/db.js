@@ -52,11 +52,11 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Para relacionarlos hacemos un destructuring
 const {
   Facilities,
+  Services,
   Housing,
   Location,
   Order,
   Reservations,
-  Services,
   UserAdmin,
   UserClient,
   UserMod,
