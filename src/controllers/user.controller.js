@@ -15,8 +15,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "pf.grupo5@gmail.com",
-    pass: "iwyssmpfaiqpplkw",
+    user: "henryhome.grupo5@gmail.com",
+    pass: "dkccunkjkwectfeh",
   },
 });
 
@@ -96,19 +96,19 @@ const register = async (req, res, next) => {
     transporter.verify().then(() => console.log("Listo para enviar mail"));
 
     const mailOptions = {
-      from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
+      from: '"Henry Home 🏠" <henryhome.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Registro ✔", // Subject line
       html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
       /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
 
-    /* transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
       if (error) console.log(error);
       else {
         console.log("E-mail enviado");
       }
-    }); */
+    });
 
     const { password, ...userData } = result.dataValues;
     res.json({ userData, token, message: "E-mail enviado" });

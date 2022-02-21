@@ -2,13 +2,23 @@ const { Reservations, Housing, Order, UserClient } = require("../db");
 const { daysCalculator } = require("../libs/daysCalculator");
 const { validateDate } = require("../libs/validateDate");
 const mercadopago = require("mercadopago");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "henryhome.grupo5@gmail.com",
+    pass: "dkccunkjkwectfeh",
+  },
+});
 
 const createReservation = async (req, res, next) => {
   const { id_hotel, date_start, date_end, detail, title } = req.body;
   console.log(req.body);
   try {
     if (!id_hotel || !date_start || !date_end || !detail) {
-
       return res.json(400).json({ message: "Se necesitan datos" });
     }
     const hotel = await Housing.findByPk(id_hotel);
@@ -31,8 +41,12 @@ const createReservation = async (req, res, next) => {
       ],
       back_urls: {
         success: "https://henry-home.vercel.app/payment/success",
+        failure: "https://henry-home.vercel.app/payment/failure",
+        pending: "https://henry-home.vercel.app/payment/failure",
+
+        /* success: "http://localhost:3000/payment/success",
         failure: "http://localhost:3000/payment/failure",
-        pending: "http://localhost:3000/payment/pending",
+        pending: "http://localhost:3000/payment/failure", */
       },
       auto_return: "approved",
     };
@@ -56,11 +70,11 @@ const createReservation = async (req, res, next) => {
     await newReservation.setOrder(order.id);
     await newReservation.setUserClient(req.userId);
     await newReservation.setHousing(id_hotel);
-    
+
     res.status(201).json({
       newReservation,
       order,
-      message: "Reserva creada tiene 24hs para abonar",
+      message: "Reserva creada",
       linkPay: mercadoPagoResponse.body.init_point,
     });
   } catch (error) {
@@ -83,6 +97,29 @@ const updateReservation = async (req, res) => {
       }
     );
 
+    const reservation = await Reservations.findOne({
+      where: { id_mercado_pago: id },
+      include: [{ model: UserClient }],
+    });
+
+   
+    transporter.verify().then(() => console.log("Listo para enviar mail"));
+
+    const mailOptions = {
+      from: '"Henry Home 🏠" <henryhome.grupo5@gmail.com>', // sender address
+      to: reservation.userClient.email, // list of receivers
+      subject: "Registro ✔", // Subject line
+      html: `<p>Reserva realizada con exito!!</p>`, // html body
+      /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) console.log(error);
+      else {
+        console.log("E-mail enviado");
+      }
+    });
+
     res.status(200).json({ message: "Reserva actualizada" });
   } catch (error) {
     console.log(error);
@@ -90,23 +127,22 @@ const updateReservation = async (req, res) => {
   }
 };
 
-
-const cancelReservation = async (req,res)=>{
-  const { id } = req.body
-  try{
+const cancelReservation = async (req, res) => {
+  const { id } = req.body;
+  try {
     await Reservations.destroy({
-      where:{
-        id:id
-      }
-    })
-    res.status(200).json({message:'Reservation deleted'})
-  }catch(err){
-    res.status(500).json(err)
+      where: {
+        id: id,
+      },
+    });
+    res.status(200).json({ message: "Reservation deleted" });
+  } catch (err) {
+    res.status(500).json(err);
   }
-}
+};
 
 module.exports = {
   createReservation,
   updateReservation,
-  cancelReservation
+  cancelReservation,
 };
