@@ -10,10 +10,12 @@ const {
 } = require("../db");
 const { buscar } = require("../libs/buscar");
 const filter = require("../libs/Filter");
+const { Op } = require("sequelize");
+
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
-  const ubicacion = req.query.location ? { name: req.query.location } : null;
+  const ubicacion = req.query.location ? { name: {[Op.substring]: req.query.location.toLowerCase() }} : null;
 
   try {
     const Offset = size * (page - 1);
@@ -113,7 +115,7 @@ const createHouse = async (req, res, next) => {
 
     const newLoc = await Location.findOrCreate({
       where: {
-        name:location
+        name:location.toLowerCase() 
     },
     defaults: {
       lng: coordinates.lng,
