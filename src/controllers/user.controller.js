@@ -99,7 +99,7 @@ const register = async (req, res, next) => {
       from: '"Henry Home 🏠" <henryhome.grupo5@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "Registro ✔", // Subject line
-      html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="https://henry-home.vercel.app/register?token=${token}">Link</a>`, // html body
+      html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="https://henryhome.vercel.app/register?token=${token}">Link</a>`, // html body
       /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
 
@@ -226,7 +226,7 @@ const confirmUpdatePassword = async (req, res) => {
         from: '"Henry Home 🏠" <pf.grupo5@gmail.com>', // sender address
         to: email, // list of receivers
         subject: "Cambio de contraseña ✔", // Subject line
-        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henry-home.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
+        html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='https://henryhome.vercel.app/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, // html body
         /*  html: `<p>Para cambiar tu contraseña haz click en siguiente enlace: <a href='http://localhost:3000/change-password?token=${token}' target='_blank'>cambiar contraseña</a></p>`, */ // html body
       };
       transporter.sendMail(mailOptions, (error, info) => {
