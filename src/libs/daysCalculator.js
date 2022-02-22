@@ -1,13 +1,11 @@
-const moment = require('moment')
+const moment = require("moment");
 
-const daysCalculator = (d1,d2)=>
- {
+const daysCalculator = (d1, d2) => {
+  const date1 = moment(d1);
+  const date2 = moment(d2);
 
-    const date1 = moment(d1);
-    const date2 = moment(d2);
-
-    return date2.diff(date1, "days") + 1; 
-/*  var aFecha1 = f1.split('-');
+  return date2.diff(date1, "days") !== 0 ? date2.diff(date1, "days") : 1;
+  /*  var aFecha1 = f1.split('-');
  var aFecha2 = f2.split('-');
  
  var fFecha1 = Date.UTC(aFecha1[0],aFecha1[1]-1,aFecha1[2]);
@@ -17,6 +15,6 @@ const daysCalculator = (d1,d2)=>
  var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
  
  return dias; */
- }
+};
 
- module.exports = { daysCalculator };
+module.exports = { daysCalculator };

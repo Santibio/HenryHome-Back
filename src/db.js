@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const DB_NAME = process.env.DB_NAME || "henryhome";
 const DB_USER = process.env.DB_USER || "postgres";
-const DB_PASSWORD = process.env.DB_PASSWORD || "postgre";
+const DB_PASSWORD = process.env.DB_PASSWORD || "postgres";
 
 let sequelize;
 if (process.env.NODE_ENV === "production") {
