@@ -150,7 +150,9 @@ const createHouse = async (req, res, next) => {
     await house.setLocation(newLoc[0].dataValues.id);
     await house.setUserMod(req.userId);
 
-    res.status(201).json(house);
+    status
+      ? res.status(201).json({ house, message: "Casa creada correctamente" })
+      : res.status(404).json({ message: "Ya hay una casa con ese nombre" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -161,7 +163,7 @@ const updateHouse = async (req, res, next) => {
   const { id } = req.body;
   try {
     const prev = await Housing.findByPk(id);
-    console.log(req.body);
+
     const {
       name = prev.name,
       pricePerNight = prev.pricePerNight,
@@ -180,7 +182,7 @@ const updateHouse = async (req, res, next) => {
     if (housecheck.userModId !== req.userId) {
       return res.status(401).json({ message: "No es el dueño de esta casa" });
     }
-    
+
     await Housing.update(
       {
         name,
@@ -201,16 +203,22 @@ const updateHouse = async (req, res, next) => {
 
     const houseUpdated = await Housing.findByPk(id);
 
-    let servicesDB = await Services.findAll({
-      where: { name: services },
-    });
-    let facilitiesDB = await Facilities.findAll({
-      where: { name: facilities },
-    });
+    if (services) {
+      let servicesDB = await Services.findAll({
+        where: { name: services },
+      });
+      await houseUpdated.setServices(servicesDB);
+    }
+    if (facilities) {
+      let facilitiesDB = await Facilities.findAll({
+        where: { name: facilities },
+      });
+      await houseUpdated.setFacilities(facilitiesDB);
+    }
 
-    await houseUpdated.setServices(servicesDB);
-    await houseUpdated.setFacilities(facilitiesDB);
-    await houseUpdated.setLocation(location[0].id);
+    console.log(location);
+
+    await houseUpdated.setLocation(location);
 
     res
       .status(201)
