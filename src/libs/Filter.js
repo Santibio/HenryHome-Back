@@ -16,11 +16,11 @@ module.exports =  (req)=> {
       }
       //People
       if (req.query.numberOfPeople) {
-        filters.numberOfPeople = req.query.numberOfPeople
+        filters.numberOfPeople ={[Op.gte]: req.query.numberOfPeople}
       }
       //Beds
       if (req.query.numberOfBeds) {
-        filters.numberOfBeds = req.query.numberOfBeds
+        filters.numberOfBeds = {[Op.gte]:req.query.numberOfBeds}
       }
       //status
       if (req.query.status) {
