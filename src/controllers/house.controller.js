@@ -106,8 +106,19 @@ const createHouse = async (req, res, next) => {
     services,
     facilities,
     location,
+    coordinates,
   } = req.body;
+  console.log(coordinates)
   try {
+
+    const newLoc = await Location.findOrCreate({
+      where: {
+        name:location
+    },
+    defaults: {
+      lng: coordinates.lng,
+      lat: coordinates.lat,}
+  })
     const [house, status] = await Housing.findOrCreate({
       where: {
         name: name.toLowerCase(),
@@ -133,8 +144,10 @@ const createHouse = async (req, res, next) => {
 
     await house.addServices(servicesDB);
     await house.addFacilities(facilitiesDB);
-    
-    await house.setLocation(location);
+    console.log(house)
+    console.log(newLoc)
+
+    await house.setLocation(newLoc[0].dataValues.id);
     await house.setUserMod(req.userId);
 
     status
