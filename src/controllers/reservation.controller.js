@@ -35,7 +35,7 @@ const createReservation = async (req, res, next) => {
         {
           title,
           quantity: 1,
-          currency_id: "ARS",
+          currency_id: "USD",
           unit_price: amount,
         },
       ],
