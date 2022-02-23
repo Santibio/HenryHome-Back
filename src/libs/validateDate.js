@@ -8,12 +8,14 @@ const validateDate = (id, dateStart, dateEnd) =>
       
         dateStart = moment(dateStart).format("YYYY-MM-DD");
         dateEnd = moment(dateEnd).format("YYYY-MM-DD");
+
+        const resultFilter = result.Reservations?.filter(e=>e.status==="approved")
        
-        for (let i = 0; i < result.Reservations.length; i++) {
+        for (let i = 0; i < resultFilter.length; i++) {
           console.log(
             dateStart ==
-            moment(result.Reservations[i].date_start).format("YYYY-MM-DD"),
-            i, 
+              moment(result.Reservations[i].date_start).format("YYYY-MM-DD"),
+            i
           );
           if (
             dateStart <=

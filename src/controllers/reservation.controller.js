@@ -40,11 +40,11 @@ const createReservation = async (req, res, next) => {
         },
       ],
       back_urls: {
-        success: "https://henry-home.vercel.app/payment/success",
-        failure: "https://henry-home.vercel.app/payment/failure",
-        pending: "https://henry-home.vercel.app/payment/failure",
+        success: "https://henryhome.vercel.app/payment/success",
+        failure: "https://henryhome.vercel.app/payment/failure",
+        pending: "https://henryhome.vercel.app/payment/failure",
 
-        /* success: "http://localhost:3000/payment/success",
+    /*     success: "http://localhost:3000/payment/success",
         failure: "http://localhost:3000/payment/failure",
         pending: "http://localhost:3000/payment/failure", */
       },

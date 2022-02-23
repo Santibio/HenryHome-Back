@@ -39,9 +39,6 @@ module.exports = (sequelize) => {
     images: {
       type: DataTypes.ARRAY(DataTypes.TEXT),
     },
-    image:{
-       type: DataTypes.TEXT,
-    },
     average: {
       type: DataTypes.VIRTUAL,
       
