@@ -44,7 +44,7 @@ const createReservation = async (req, res, next) => {
         failure: "https://henryhome.vercel.app/payment/failure",
         pending: "https://henryhome.vercel.app/payment/failure",
 
-    /*     success: "http://localhost:3000/payment/success",
+        /*  success: "http://localhost:3000/payment/success",
         failure: "http://localhost:3000/payment/failure",
         pending: "http://localhost:3000/payment/failure", */
       },
@@ -102,7 +102,6 @@ const updateReservation = async (req, res) => {
       include: [{ model: UserClient }],
     });
 
-   
     transporter.verify().then(() => console.log("Listo para enviar mail"));
 
     const mailOptions = {

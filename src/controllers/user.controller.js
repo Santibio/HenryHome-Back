@@ -127,7 +127,7 @@ const getUserById = async (req, res, next) => {
     if (role === "Client") {
       user = await userRoles[role].findByPk(id, {
         include: [
-          { model: Reservations },
+          { model: Reservations, include: [{model: Housing}]},
           { model: Reviews, order: [['updatedAt', 'DESC']] , include:[{ model: Housing, attributes: ["name","images","id"] }, {model :UserClient}]},
           { model: Housing, as: "favs" },
           
