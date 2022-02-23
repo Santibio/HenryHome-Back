@@ -104,7 +104,9 @@ const register = async (req, res, next) => {
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
+
       if (error) console.log(error);
+
       else {
         console.log("E-mail enviado");
       }
@@ -126,7 +128,7 @@ const getUserById = async (req, res, next) => {
       user = await userRoles[role].findByPk(id, {
         include: [
           { model: Reservations },
-          { model: Reviews },
+          { model: Reviews, order: [['updatedAt', 'DESC']] , include:[{ model: Housing, attributes: ["name","images","id"] }, {model :UserClient}]},
           { model: Housing, as: "favs" },
           
         ],

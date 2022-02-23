@@ -127,7 +127,7 @@ const updateReservation = async (req, res) => {
 };
 
 const cancelReservation = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     await Reservations.destroy({
       where: {

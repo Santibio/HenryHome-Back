@@ -19,7 +19,7 @@ const serverPreparation = async () => {
     locationsArray.forEach(async (f) => {
       await Location.findOrCreate({
         where: {
-          name: f,
+          name: f.toLowerCase() ,
         },
       });
     });

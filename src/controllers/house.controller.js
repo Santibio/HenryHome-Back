@@ -10,10 +10,12 @@ const {
 } = require("../db");
 const { buscar } = require("../libs/buscar");
 const filter = require("../libs/Filter");
+const { Op } = require("sequelize");
+
 
 const getHouses = async (req, res, next) => {
   const { page = 1, size = 10 } = req.query;
-  const ubicacion = req.query.location ? { name: req.query.location } : null;
+  const ubicacion = req.query.location ? { name: {[Op.substring]: req.query.location.toLowerCase() }} : null;
 
   try {
     const Offset = size * (page - 1);
@@ -83,8 +85,8 @@ const getHouseById = async (req, res, next) => {
         { model: Facilities },
         { model: Services },
         { model: UserMod },
-        { model: Reservations},
-        { model: Reviews, include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
+        { model: Reservations },
+        { model: Reviews,order: [['updatedAt', 'DESC']] ,include:[{ model: UserClient, attributes: ["firstName", "lastName", "email"] }]},
       ],
     });
     res.json(Houses);
@@ -106,8 +108,19 @@ const createHouse = async (req, res, next) => {
     services,
     facilities,
     location,
+    coordinates,
   } = req.body;
+  console.log(coordinates)
   try {
+
+    const newLoc = await Location.findOrCreate({
+      where: {
+        name:location.toLowerCase() 
+    },
+    defaults: {
+      lng: coordinates.lng,
+      lat: coordinates.lat,}
+  })
     const [house, status] = await Housing.findOrCreate({
       where: {
         name: name.toLowerCase(),
@@ -133,8 +146,10 @@ const createHouse = async (req, res, next) => {
 
     await house.addServices(servicesDB);
     await house.addFacilities(facilitiesDB);
-    
-    await house.setLocation(location);
+    console.log(house)
+    console.log(newLoc)
+
+    await house.setLocation(newLoc[0].dataValues.id);
     await house.setUserMod(req.userId);
 
     status
