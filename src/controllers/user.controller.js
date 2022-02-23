@@ -105,8 +105,7 @@ const register = async (req, res, next) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
 
-      if (error) console.log(error);
-
+      if (error) return res.status(400).json({message:"Error al enviar mail"});
       else {
         console.log("E-mail enviado");
       }
