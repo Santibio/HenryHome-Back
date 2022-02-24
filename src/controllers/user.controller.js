@@ -38,8 +38,13 @@ const login = async (req, res, next) => {
       
     });
 
+    
     if (!existingUser)
       return res.status(404).json({ message: "Usuario no existe" });
+
+    if(!existingUser.verify)
+      return res.status(401).json({ message:"Usuario no verificado" })
+
     const isPasswordCorrect = await bcrypt.compare(
       inputPassword,
       existingUser.password
@@ -105,8 +110,7 @@ const register = async (req, res, next) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
 
-      if (error) console.log(error);
-
+      if (error) return res.status(400).json({message:"Error al enviar mail"});
       else {
         console.log("E-mail enviado");
       }
@@ -155,6 +159,18 @@ const verify = async (req, res, next) => {
   const { token } = req.query;
   try {
     const { id } = jwt.verify(token, process.env.SECRET_WORD);
+
+    const find = await UserMod.update(
+      { verify: true },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+
+    if(find>= 1){return (res.status(201).json({ message: "Usuario correctamente verificado" }));}
+      
     const result = await UserClient.update(
       { verify: true },
       {

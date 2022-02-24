@@ -18,7 +18,7 @@ const getHouses = async (req, res, next) => {
   const ubicacion = req.query.location ? { name: {[Op.substring]: req.query.location.toLowerCase() }} : null;
 
   try {
-    const Offset = size * (page - 1);
+    const Offset = Math.ceil(size * (page - 1)) ;
 
     const count = await Housing.findAndCountAll({
       where: filter(req),
