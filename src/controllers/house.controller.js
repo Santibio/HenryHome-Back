@@ -66,7 +66,7 @@ const getHouses = async (req, res, next) => {
       });
     }
     HousePage.count = count.count - c; // Esto es xq el count All me cuenta tambien las relaciones de servicxes y facilities y no se como cambiarlo sin traer menos
-
+    console.log(HousePage);
     res
       .status(200)
       .json(HousePage?.rows.length ? HousePage : { message: "Error 404" });
