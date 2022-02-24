@@ -134,7 +134,7 @@ const cancelReservation = async (req, res) => {
         id: id,
       },
     });
-    res.status(200).json({ message: "Reservation deleted" });
+    res.status(200).json({ message: "Reserva eliminada, contactese con 0800-henryhome para mas información" });
   } catch (err) {
     res.status(500).json(err);
   }
