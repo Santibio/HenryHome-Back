@@ -35,7 +35,7 @@ const createReservation = async (req, res, next) => {
         {
           title,
           quantity: 1,
-          currency_id: "USD",
+          currency_id: "ARS",
           unit_price: amount,
         },
       ],
@@ -107,7 +107,7 @@ const updateReservation = async (req, res) => {
     const mailOptions = {
       from: '"Henry Home 🏠" <henryhome.grupo5@gmail.com>', // sender address
       to: reservation.userClient.email, // list of receivers
-      subject: "Registro ✔", // Subject line
+      subject: "Reserva ✔", // Subject line
       html: `<p>Reserva realizada con exito!!</p>`, // html body
       /* html: `<p>Gracias por registrase en Henry Home, haga click en el siguiente link para activar su cuenta: </p> <a href="http://localhost:3000/register?token=${token}">Link</a>`, */ // html body
     };
@@ -134,7 +134,7 @@ const cancelReservation = async (req, res) => {
         id: id,
       },
     });
-    res.status(200).json({ message: "Reserva eliminada, contactese con 0800-henryhome para mas información" });
+    res.status(200).json({ message: "Reserva eliminada, contactese con 800-henryhome para mas información" });
   } catch (err) {
     res.status(500).json(err);
   }
